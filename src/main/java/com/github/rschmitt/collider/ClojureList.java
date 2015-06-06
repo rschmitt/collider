@@ -29,10 +29,6 @@ public abstract class ClojureList<T> implements List<T> {
         this.delegate = (List) delegate;
     }
 
-    public static <T> ClojureList<T> create() {
-        return create(PersistentVector.EMPTY);
-    }
-
     public static <T> ClojureList<T> create(T... ts) {
         return create(PersistentVector.create(ts));
     }
