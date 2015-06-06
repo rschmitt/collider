@@ -3,4 +3,5 @@ jdk: oraclejdk8
 script:
   - mvn clean test
   - mvn clean test -f pom-1.7.xml
+  - mvn clean test -f pom-1.5.xml
 install: mvn install -DskipTests=true -Dgpg.skip=true
