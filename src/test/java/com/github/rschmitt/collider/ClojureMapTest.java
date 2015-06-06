@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import static com.github.rschmitt.collider.ClojureMap.create;
 import static com.github.rschmitt.collider.ClojureMap.toClojureMap;
 import static com.github.rschmitt.collider.ClojureMap.toStrictClojureMap;
+import static com.github.rschmitt.collider.Collider.clojureMap;
 import static java.util.function.Function.identity;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
@@ -15,7 +16,7 @@ import static org.testng.Assert.assertTrue;
 public class ClojureMapTest {
     @Test
     public void smokeTest() {
-        ClojureMap<String, String> emptyMap = create();
+        ClojureMap<String, String> emptyMap = clojureMap();
 
         ClojureMap<String, String> assoc = emptyMap.assoc("key", "value");
 
@@ -50,16 +51,16 @@ public class ClojureMapTest {
 
     @Test
     public void testFactoryMethods() {
-        ClojureMap<String, Integer> expected = create();
+        ClojureMap<String, Integer> expected = clojureMap();
 
         expected = expected.assoc("a", 1);
-        assertEquals(create("a", 1), expected);
+        assertEquals(clojureMap("a", 1), expected);
 
         expected = expected.assoc("b", 2);
-        assertEquals(create("a", 1, "b", 2), expected);
+        assertEquals(clojureMap("a", 1, "b", 2), expected);
 
         expected = expected.assoc("c", 3);
-        assertEquals(create("a", 1, "b", 2, "c", 3), expected);
+        assertEquals(clojureMap("a", 1, "b", 2, "c", 3), expected);
     }
 
     @Test
@@ -69,13 +70,13 @@ public class ClojureMapTest {
 
     @Test
     public void testStrictCollector() {
-        ClojureMap<String, Integer> initial = ClojureMap.create("one", 1, "two", 2, "six", 6);
+        ClojureMap<String, Integer> initial = clojureMap("one", 1, "two", 2, "six", 6);
 
         ClojureMap<Integer, Integer> collect = initial
                 .entrySet()
                 .stream()
                 .collect(toStrictClojureMap(e -> e.getKey().length(), e -> e.getValue(), Math::max));
 
-        assertEquals(collect, ClojureMap.create(3, 6));
+        assertEquals(collect, clojureMap(3, 6));
     }
 }

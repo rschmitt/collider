@@ -30,20 +30,8 @@ public abstract class ClojureMap<K, V> implements Map<K, V> {
 
     private final Map<K, V> delegate;
 
-    public static <K, V> ClojureMap<K, V> create() {
-        return create(PersistentHashMap.EMPTY);
-    }
-
-    public static <K, V> ClojureMap<K, V> create(K k, V v) {
-        return create(PersistentHashMap.create(k, v));
-    }
-
-    public static <K, V> ClojureMap<K, V> create(K k1, V v1, K k2, V v2) {
-        return create(PersistentHashMap.create(k1, v1, k2, v2));
-    }
-
-    public static <K, V> ClojureMap<K, V> create(K k1, V v1, K k2, V v2, K k3, V v3) {
-        return create(PersistentHashMap.create(k1, v1, k2, v2, k3, v3));
+    static <K, V> ClojureMap<K, V> create(Object... init) {
+        return create(PersistentHashMap.create(init));
     }
 
     @SuppressWarnings("unchecked")

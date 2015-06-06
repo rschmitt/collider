@@ -30,7 +30,7 @@ public abstract class ClojureSet<T> implements Set<T> {
         this.delegate = (Set) delegate;
     }
 
-    public static <T> ClojureSet<T> create(T... ts) {
+    static <T> ClojureSet<T> create(T... ts) {
         return create(PersistentHashSet.create(ts));
     }
 

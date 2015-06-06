@@ -6,19 +6,20 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.github.rschmitt.collider.ClojureList.toClojureList;
+import static com.github.rschmitt.collider.Collider.clojureList;
 import static org.testng.Assert.assertEquals;
 
 public class ClojureListTest {
     @Test
     public void test() {
-        List<String> myStrings = ClojureList.create("a", "b", "c");
+        List<String> myStrings = clojureList("a", "b", "c");
         assertEquals(3, myStrings.size());
         assertEquals("a", myStrings.get(0));
     }
 
     @Test
     public void testAppend() {
-        ClojureList<String> strings = ClojureList.create("a", "b", "c");
+        ClojureList<String> strings = clojureList("a", "b", "c");
         strings = strings.append("d");
         assertEquals(4, strings.size());
         assertEquals("d", strings.get(3));
@@ -26,7 +27,7 @@ public class ClojureListTest {
 
     @Test
     public void testStreams() {
-        ClojureList<String> strings = ClojureList.create("a", "b", "c");
+        ClojureList<String> strings = clojureList("a", "b", "c");
         strings = strings.append("d");
 
         assertEquals(4, strings.stream().count());

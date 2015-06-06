@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import java.util.Set;
 
 import static com.github.rschmitt.collider.ClojureSet.toClojureSet;
+import static com.github.rschmitt.collider.Collider.clojureSet;
 import static java.util.Collections.emptySet;
 import static java.util.stream.IntStream.range;
 import static org.testng.Assert.assertEquals;
@@ -13,7 +14,7 @@ import static org.testng.Assert.assertTrue;
 public class ClojureSetTest {
     @Test
     public void transientTest() {
-        ClojureSet<String> before = ClojureSet.create("asdf");
+        ClojureSet<String> before = clojureSet("asdf");
         TransientSet<String> strings = before.asTransient();
 
         strings.add("jkl;");
@@ -34,7 +35,7 @@ public class ClojureSetTest {
 
     @Test
     public void addContractTest() {
-        ClojureSet<String> before = ClojureSet.create("asdf");
+        ClojureSet<String> before = clojureSet("asdf");
         TransientSet<String> strings = before.asTransient();
 
         strings.add("jkl;");
@@ -45,7 +46,7 @@ public class ClojureSetTest {
 
     @Test
     public void removeContractTest() {
-        ClojureSet<String> before = ClojureSet.create("asdf");
+        ClojureSet<String> before = clojureSet("asdf");
         TransientSet<String> strings = before.asTransient();
 
         strings.remove("asdf");
