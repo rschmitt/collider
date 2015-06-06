@@ -9,9 +9,8 @@ import static com.github.rschmitt.collider.ClojureMap.toClojureMap;
 import static com.github.rschmitt.collider.ClojureMap.toStrictClojureMap;
 import static com.github.rschmitt.collider.Collider.clojureMap;
 import static java.util.function.Function.identity;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
+import static org.testng.Assert.assertThrows;
 
 public class ClojureMapTest {
     @Test
@@ -78,5 +77,17 @@ public class ClojureMapTest {
                 .collect(toStrictClojureMap(e -> e.getKey().length(), e -> e.getValue(), Math::max));
 
         assertEquals(collect, clojureMap(3, 6));
+    }
+
+    @Test
+    public void destructiveUpdatesFail() {
+        ClojureMap<String, Integer> map = ClojureMap.create("a", 1);
+        assertThrows(map::clear);
+        assertThrows(() -> map.put("b", 15));
+        assertThrows(() -> map.putAll(map));
+        assertThrows(() -> map.remove("a"));
+        assertThrows(() -> map.remove("a", 1));
+        assertThrows(() -> map.replace("a", 2));
+        assertThrows(() -> map.replace("a", 1, 2));
     }
 }
