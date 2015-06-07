@@ -56,6 +56,16 @@ public abstract class ClojureMap<K, V> implements Map<K, V> {
         return ClojureMap.create((Map<K, V>) assoc);
     }
 
+    public ClojureMap<K, V> merge(ClojureMap<K, V>... maps) {
+        TransientMap<K, V> ret = asTransient();
+        for (ClojureMap<K, V> map : maps) {
+            for (Entry<K, V> entry : map.entrySet()) {
+                ret.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return ret.toPersistent();
+    }
+
     public TransientMap<K, V> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();

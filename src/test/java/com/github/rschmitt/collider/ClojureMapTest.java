@@ -9,8 +9,10 @@ import static com.github.rschmitt.collider.ClojureMap.toClojureMap;
 import static com.github.rschmitt.collider.ClojureMap.toStrictClojureMap;
 import static com.github.rschmitt.collider.Collider.clojureMap;
 import static java.util.function.Function.identity;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertThrows;
+import static org.testng.Assert.assertTrue;
 
 public class ClojureMapTest {
     @Test
@@ -80,8 +82,17 @@ public class ClojureMapTest {
     }
 
     @Test
+    public void testMerge() throws Exception {
+        ClojureMap<String, Integer> actual = clojureMap("a", 1)
+                .merge(clojureMap("a", 2, "b", 4),
+                        clojureMap("a", 3, "d", 4),
+                        clojureMap("b", null, "e", null));
+        assertEquals(actual, clojureMap("a", 3, "b", null, "d", 4, "e", null));
+    }
+
+    @Test
     public void destructiveUpdatesFail() {
-        ClojureMap<String, Integer> map = ClojureMap.create("a", 1);
+        ClojureMap<String, Integer> map = clojureMap("a", 1);
         assertThrows(map::clear);
         assertThrows(() -> map.put("b", 15));
         assertThrows(() -> map.putAll(map));
