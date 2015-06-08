@@ -32,6 +32,7 @@ public class TransientMap<K, V> {
         delegate = delegate.without(key);
     }
 
+    @SuppressWarnings("unchecked")
     public V get(K key) {
         return (V) delegate.valAt(key);
     }
