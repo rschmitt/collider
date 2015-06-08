@@ -95,14 +95,23 @@ public class ClojureMapTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void destructiveUpdatesFail() {
-        ClojureMap<String, Integer> map = clojureMap("a", 1);
-        assertThrows(map::clear);
-        assertThrows(() -> map.put("b", 15));
-        assertThrows(() -> map.putAll(clojureMap()));
-        assertThrows(() -> map.remove("a"));
-        assertThrows(() -> map.remove("a", 1));
-        assertThrows(() -> map.replace("a", 2));
-        assertThrows(() -> map.replace("a", 1, 2));
+        ClojureMap<String, Integer> map = clojureMap("a", 0);
+        expectThrows(UnsupportedOperationException.class, map::clear);
+        expectThrows(UnsupportedOperationException.class, () -> map.put("b", 15));
+        expectThrows(UnsupportedOperationException.class, () -> map.putAll(clojureMap()));
+        expectThrows(UnsupportedOperationException.class, () -> map.remove("a"));
+        expectThrows(UnsupportedOperationException.class, () -> map.remove("a", 0));
+        expectThrows(UnsupportedOperationException.class, () -> map.replace("a", 0));
+        expectThrows(UnsupportedOperationException.class, () -> map.replace("a", 0, 2));
+        expectThrows(UnsupportedOperationException.class, () -> map.putIfAbsent("b", 4));
+        expectThrows(UnsupportedOperationException.class, () -> map.compute("a", String::codePointAt));
+        expectThrows(UnsupportedOperationException.class, () -> map.computeIfAbsent("b", String::length));
+        expectThrows(UnsupportedOperationException.class, () -> map.computeIfPresent("a", String::codePointAt));
+        expectThrows(UnsupportedOperationException.class, () -> map.merge("a", 4, (x, y) -> x + y));
+        expectThrows(UnsupportedOperationException.class, () -> map.compute("a", String::codePointAt));
+        expectThrows(UnsupportedOperationException.class, () -> map.computeIfAbsent("b", String::length));
+        expectThrows(UnsupportedOperationException.class, () -> map.computeIfPresent("a", String::codePointAt));
     }
 }
