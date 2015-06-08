@@ -5,8 +5,10 @@ import clojure.lang.IPersistentVector;
 import clojure.lang.ITransientVector;
 import clojure.lang.PersistentVector;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
 
+@NotThreadSafe
 public class TransientList<T> {
     private volatile ITransientVector delegate;
 

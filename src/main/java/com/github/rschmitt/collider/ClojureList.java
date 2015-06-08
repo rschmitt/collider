@@ -2,11 +2,13 @@ package com.github.rschmitt.collider;
 
 import clojure.lang.*;
 
+import javax.annotation.concurrent.Immutable;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+@Immutable
 public class ClojureList<T> implements List<T> {
     private final List<T> delegate;
 

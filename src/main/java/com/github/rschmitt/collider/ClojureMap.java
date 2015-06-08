@@ -2,12 +2,14 @@ package com.github.rschmitt.collider;
 
 import clojure.lang.*;
 
+import javax.annotation.concurrent.Immutable;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collector;
 
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
+@Immutable
 public class ClojureMap<K, V> implements Map<K, V> {
     private final Map<K, V> delegate;
 
