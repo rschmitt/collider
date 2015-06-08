@@ -2,7 +2,6 @@ package com.github.rschmitt.collider;
 
 import org.testng.annotations.Test;
 
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
@@ -22,14 +21,16 @@ public class ClojureMapTest {
         ClojureMap<String, String> emptyMap = clojureMap();
 
         ClojureMap<String, String> assoc = emptyMap.assoc("key", "value");
+        ClojureMap<String, String> dissoc = assoc.dissoc("key");
 
         assertTrue(assoc.containsKey("key"));
         assertEquals(assoc.size(), 1);
         assertEquals(assoc.get("key"), "value");
+        assertEquals(dissoc, emptyMap);
     }
 
     @Test
-    public void testConvenienceMethods() {
+    public void convenienceMethods() {
         ClojureMap<String, Integer> collect = Stream.of("two", "three", "four").collect(toClojureMap(identity(), String::length));
 
         ClojureMap<String, Integer> doubled = collect.mapValues(x -> x * 2);
@@ -50,10 +51,16 @@ public class ClojureMapTest {
         assertNull(filteredVals.get("two"));
         assertEquals(filteredVals.get("three").intValue(), 5);
         assertEquals(filteredVals.get("four").intValue(), 4);
+
+        ClojureMap<String, Integer> excludedKeys = collect.excludeKeys(x -> x.startsWith("t"));
+        assertEquals(excludedKeys, clojureMap("four", 4));
+
+        ClojureMap<String, Integer> excludedVals = collect.excludeValues(v -> v >= 4);
+        assertEquals(excludedVals, clojureMap("two", 3));
     }
 
     @Test
-    public void testFactoryMethods() {
+    public void factoryMethods() {
         ClojureMap<String, Integer> expected = clojureMap();
 
         expected = expected.assoc("a", 1);
@@ -67,12 +74,12 @@ public class ClojureMapTest {
     }
 
     @Test
-    public void testOverwrite() {
+    public void overwrite() {
         assertEquals(create("a", 1).assoc("a", 3), create("a", 3));
     }
 
     @Test
-    public void testStrictCollector() {
+    public void strictCollector() {
         ClojureMap<String, Integer> initial = clojureMap("one", 1, "two", 2, "six", 6);
 
         ClojureMap<Integer, Integer> collect = initial
@@ -84,7 +91,7 @@ public class ClojureMapTest {
     }
 
     @Test
-    public void testMerge() throws Exception {
+    public void merge() throws Exception {
         ClojureMap<String, Integer> actual = clojureMap("a", 1)
                 .merge(clojureMap("a", 2, "b", 4),
                         clojureMap("a", 3, "d", 4),

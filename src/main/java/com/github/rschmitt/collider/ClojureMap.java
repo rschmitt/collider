@@ -60,6 +60,12 @@ public abstract class ClojureMap<K, V> implements Map<K, V> {
         return ClojureMap.create((Map<K, V>) assoc);
     }
 
+    @SuppressWarnings("unchecked")
+    public ClojureMap<K, V> dissoc(K key) {
+        Object dissoc = RT.dissoc(delegate, key);
+        return ClojureMap.create((Map<K, V>) dissoc);
+    }
+
     @SafeVarargs
     public final ClojureMap<K, V> merge(ClojureMap<K, V>... maps) {
         TransientMap<K, V> ret = asTransient();
