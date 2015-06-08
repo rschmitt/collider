@@ -1,29 +1,16 @@
 package com.github.rschmitt.collider;
 
-import com.github.rschmitt.collider.internal.DelegateFactory;
 
-import net.fushizen.invokedynamic.proxy.DynamicProxy;
+import clojure.lang.*;
 
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.Collector;
-
-import clojure.lang.IEditableCollection;
-import clojure.lang.IPersistentSet;
-import clojure.lang.ITransientCollection;
-import clojure.lang.ITransientSet;
-import clojure.lang.PersistentHashSet;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
-public abstract class ClojureSet<T> implements Set<T> {
-    private static final DynamicProxy dynamicProxy = DelegateFactory.create(Set.class, ClojureSet.class);
-
+public class ClojureSet<T> implements Set<T> {
     private final Set<T> delegate;
 
     @SuppressWarnings("unchecked")
@@ -42,11 +29,7 @@ public abstract class ClojureSet<T> implements Set<T> {
 
     @SuppressWarnings("unchecked")
     private static <T> ClojureSet<T> create(IPersistentSet ts) {
-        try {
-            return ((ClojureSet<T>) dynamicProxy.constructor().invoke(ts));
-        } catch (Throwable throwable) {
-            throw new RuntimeException(throwable);
-        }
+        return new ClojureSet<>(ts);
     }
 
     public ClojureSet<T> with(T t) {
@@ -105,5 +88,109 @@ public abstract class ClojureSet<T> implements Set<T> {
                 return EnumSet.of(UNORDERED);
             }
         };
+    }
+
+    ////////////////////////////////
+    // Mindless delegation goes here
+    ////////////////////////////////
+
+    @Override
+    public int size() {
+        return delegate.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return delegate.isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return delegate.contains(o);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return delegate.iterator();
+    }
+
+    @Override
+    public Object[] toArray() {
+        return delegate.toArray();
+    }
+
+    @Override
+    public <T1> T1[] toArray(T1[] a) {
+        return delegate.toArray(a);
+    }
+
+    @Override
+    public boolean add(T t) {
+        return delegate.add(t);
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        return delegate.remove(o);
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return delegate.containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
+        return delegate.addAll(c);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return delegate.retainAll(c);
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return delegate.removeAll(c);
+    }
+
+    @Override
+    public void clear() {
+        delegate.clear();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return delegate.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return delegate.hashCode();
+    }
+
+    @Override
+    public Spliterator<T> spliterator() {
+        return delegate.spliterator();
+    }
+
+    @Override
+    public boolean removeIf(Predicate<? super T> filter) {
+        return delegate.removeIf(filter);
+    }
+
+    @Override
+    public Stream<T> stream() {
+        return delegate.stream();
+    }
+
+    @Override
+    public Stream<T> parallelStream() {
+        return delegate.parallelStream();
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+        delegate.forEach(action);
     }
 }

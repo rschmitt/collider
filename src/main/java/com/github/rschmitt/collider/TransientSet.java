@@ -1,11 +1,11 @@
 package com.github.rschmitt.collider;
 
-import java.util.Collection;
-
 import clojure.lang.IPersistentCollection;
 import clojure.lang.IPersistentSet;
 import clojure.lang.ITransientSet;
 import clojure.lang.PersistentHashSet;
+
+import java.util.Collection;
 
 public class TransientSet<T> {
     private volatile ITransientSet delegate;

@@ -1,9 +1,9 @@
 package com.github.rschmitt.collider;
 
-import java.util.Map;
-
 import clojure.lang.ITransientMap;
 import clojure.lang.PersistentArrayMap;
+
+import java.util.Map;
 
 public class TransientMap<K, V> {
     private volatile ITransientMap delegate;

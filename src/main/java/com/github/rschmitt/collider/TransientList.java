@@ -1,11 +1,11 @@
 package com.github.rschmitt.collider;
 
-import java.util.Collection;
-
 import clojure.lang.IPersistentCollection;
 import clojure.lang.IPersistentVector;
 import clojure.lang.ITransientVector;
 import clojure.lang.PersistentVector;
+
+import java.util.Collection;
 
 public class TransientList<T> {
     private volatile ITransientVector delegate;
