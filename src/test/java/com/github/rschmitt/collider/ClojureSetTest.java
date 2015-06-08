@@ -12,7 +12,25 @@ import static org.testng.Assert.*;
 
 public class ClojureSetTest {
     @Test
-    public void transientTest() {
+    public void persistentOps() throws Exception {
+        ClojureSet<Integer> initial = clojureSet(23);
+
+        assertEquals(initial.with(23), initial);
+        assertEquals(initial.without(23), initial.without(23));
+        assertEquals(initial.with(42), clojureSet(23, 42));
+        assertEquals(initial.with(42).size(), 2);
+    }
+
+    @Test
+    public void collector() {
+        ClojureSet<Integer> collect = range(0, 10_000).boxed().collect(toClojureSet());
+
+        assertEquals(collect.size(), 10_000);
+        for (int i = 0; i < 10_000; i++) assertTrue(collect.contains(i));
+    }
+
+    @Test
+    public void transients() {
         ClojureSet<String> before = clojureSet("asdf");
         TransientSet<String> strings = before.asTransient();
 
@@ -25,15 +43,7 @@ public class ClojureSetTest {
     }
 
     @Test
-    public void collectorTest() {
-        ClojureSet<Integer> collect = range(0, 10_000).boxed().collect(toClojureSet());
-
-        assertEquals(collect.size(), 10_000);
-        for (int i = 0; i < 10_000; i++) assertTrue(collect.contains(i));
-    }
-
-    @Test
-    public void addContractTest() {
+    public void transientAdd() {
         ClojureSet<String> before = clojureSet("asdf");
         TransientSet<String> strings = before.asTransient();
 
@@ -44,7 +54,7 @@ public class ClojureSetTest {
     }
 
     @Test
-    public void removeContractTest() {
+    public void transientRemove() {
         ClojureSet<String> before = clojureSet("asdf");
         TransientSet<String> strings = before.asTransient();
 
@@ -54,6 +64,33 @@ public class ClojureSetTest {
         ClojureSet<String> persistent = strings.toPersistent();
         Set<Object> emptySet = emptySet();
         assertEquals(persistent, emptySet);
+    }
+
+    @Test
+    public void map() throws Exception {
+        ClojureSet<Integer> initial = range(0, 100).boxed().collect(toClojureSet());
+
+        ClojureSet<Integer> mapped = initial.map(x -> x % 3);
+
+        assertEquals(mapped, clojureSet(0, 1, 2));
+    }
+
+    @Test
+    public void filter() throws Exception {
+        ClojureSet<Integer> initial = range(0, 100).boxed().collect(toClojureSet());
+
+        ClojureSet<Integer> filtered = initial.filter(x -> x >= 50);
+
+        assertEquals(filtered, range(50, 100).boxed().collect(toClojureSet()));
+    }
+
+    @Test
+    public void exclude() throws Exception {
+        ClojureSet<Integer> initial = range(0, 100).boxed().collect(toClojureSet());
+
+        ClojureSet<Integer> filtered = initial.exclude(x -> x >= 50);
+
+        assertEquals(filtered, range(0, 50).boxed().collect(toClojureSet()));
     }
 
     @Test

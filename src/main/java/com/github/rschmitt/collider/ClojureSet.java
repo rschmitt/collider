@@ -65,6 +65,10 @@ public abstract class ClojureSet<T> implements Set<T> {
         return stream().filter(p).collect(toClojureSet());
     }
 
+    public ClojureSet<T> exclude(Predicate<? super T> p) {
+        return filter(p.negate());
+    }
+
     public TransientSet<T> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
