@@ -26,10 +26,12 @@ public abstract class ClojureSet<T> implements Set<T> {
 
     private final Set<T> delegate;
 
+    @SuppressWarnings("unchecked")
     protected ClojureSet(Object delegate) {
-        this.delegate = (Set) delegate;
+        this.delegate = (Set<T>) delegate;
     }
 
+    @SafeVarargs
     static <T> ClojureSet<T> create(T... ts) {
         return create(PersistentHashSet.create(ts));
     }
@@ -66,7 +68,7 @@ public abstract class ClojureSet<T> implements Set<T> {
     public TransientSet<T> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
-        return new TransientSet((ITransientSet) asTransient);
+        return new TransientSet<>((ITransientSet) asTransient);
     }
 
     public static <T> Collector<T, TransientSet<T>, ClojureSet<T>> toClojureSet() {

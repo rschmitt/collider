@@ -25,10 +25,12 @@ public abstract class ClojureList<T> implements List<T> {
 
     private final List<T> delegate;
 
+    @SuppressWarnings("unchecked")
     protected ClojureList(Object delegate) {
-        this.delegate = (List) delegate;
+        this.delegate = (List<T>) delegate;
     }
 
+    @SafeVarargs
     public static <T> ClojureList<T> create(T... ts) {
         return create(PersistentVector.create(ts));
     }
@@ -61,7 +63,7 @@ public abstract class ClojureList<T> implements List<T> {
     public TransientList<T> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
-        return new TransientList((ITransientVector) asTransient);
+        return new TransientList<>((ITransientVector) asTransient);
     }
 
     public static <T> Collector<T, TransientList<T>, ClojureList<T>> toClojureList() {

@@ -2,6 +2,8 @@ package com.github.rschmitt.collider;
 
 import org.testng.annotations.Test;
 
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import static com.github.rschmitt.collider.ClojureMap.create;
@@ -76,7 +78,7 @@ public class ClojureMapTest {
         ClojureMap<Integer, Integer> collect = initial
                 .entrySet()
                 .stream()
-                .collect(toStrictClojureMap(e -> e.getKey().length(), e -> e.getValue(), Math::max));
+                .collect(toStrictClojureMap(e -> e.getKey().length(), Entry::getValue, Math::max));
 
         assertEquals(collect, clojureMap(3, 6));
     }
@@ -95,7 +97,7 @@ public class ClojureMapTest {
         ClojureMap<String, Integer> map = clojureMap("a", 1);
         assertThrows(map::clear);
         assertThrows(() -> map.put("b", 15));
-        assertThrows(() -> map.putAll(map));
+        assertThrows(() -> map.putAll(clojureMap()));
         assertThrows(() -> map.remove("a"));
         assertThrows(() -> map.remove("a", 1));
         assertThrows(() -> map.replace("a", 2));

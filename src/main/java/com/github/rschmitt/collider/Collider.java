@@ -25,10 +25,12 @@ public class Collider {
         return ClojureMap.create(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5);
     }
 
+    @SafeVarargs
     public static <T> ClojureList<T> clojureList(T... ts) {
         return ClojureList.create(ts);
     }
 
+    @SafeVarargs
     public static <T> ClojureSet<T> clojureSet(T... ts) {
         return ClojureSet.create(ts);
     }

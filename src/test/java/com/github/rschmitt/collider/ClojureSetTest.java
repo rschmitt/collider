@@ -53,19 +53,17 @@ public class ClojureSetTest {
 
         ClojureSet<String> persistent = strings.toPersistent();
         Set<Object> emptySet = emptySet();
-        persistent.equals(emptySet);
-        assertEquals(persistent, emptySet);
         assertEquals(persistent, emptySet);
     }
 
     @Test
     public void destructiveUpdatesFail() {
-        ClojureSet<Integer> set = ClojureSet.create(14);
+        ClojureSet<Integer> set = clojureSet(14);
         assertThrows(set::clear);
         assertThrows(() -> set.add(15));
         assertThrows(() -> set.remove(5));
         assertThrows(() -> set.remove(new Integer(5)));
-        assertThrows(() -> set.removeAll(set));
-        assertThrows(() -> set.retainAll(set));
+        assertThrows(() -> set.removeAll(clojureSet(4)));
+        assertThrows(() -> set.retainAll(clojureSet()));
     }
 }

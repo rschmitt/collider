@@ -47,7 +47,7 @@ public class ClojureListTest {
 
     @Test
     public void destructiveUpdatesFail() {
-        ClojureList<Integer> list = ClojureList.create(14);
+        ClojureList<Integer> list = clojureList(14);
         assertThrows(list::clear);
         assertThrows(() -> list.add(15));
         assertThrows(() -> list.add(15, 15));

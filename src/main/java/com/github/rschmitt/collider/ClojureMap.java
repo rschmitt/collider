@@ -30,8 +30,9 @@ public abstract class ClojureMap<K, V> implements Map<K, V> {
 
     private final Map<K, V> delegate;
 
+    @SuppressWarnings("unchecked")
     static <K, V> ClojureMap<K, V> create(Object... init) {
-        return create(PersistentHashMap.create(init));
+        return (ClojureMap<K, V>) create(PersistentHashMap.create(init));
     }
 
     @SuppressWarnings("unchecked")
@@ -43,20 +44,24 @@ public abstract class ClojureMap<K, V> implements Map<K, V> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     static <K, V> ClojureMap<K, V> wrap(IPersistentMap map) {
-        return create((Map) map);
+        return create((Map<K, V>) map);
     }
 
+    @SuppressWarnings("unchecked")
     protected ClojureMap(Object delegate) {
-        this.delegate = (Map) delegate;
+        this.delegate = (Map<K, V>) delegate;
     }
 
+    @SuppressWarnings("unchecked")
     public ClojureMap<K, V> assoc(K key, V value) {
         Associative assoc = RT.assoc(delegate, key, value);
         return ClojureMap.create((Map<K, V>) assoc);
     }
 
-    public ClojureMap<K, V> merge(ClojureMap<K, V>... maps) {
+    @SafeVarargs
+    public final ClojureMap<K, V> merge(ClojureMap<K, V>... maps) {
         TransientMap<K, V> ret = asTransient();
         for (ClojureMap<K, V> map : maps) {
             for (Entry<K, V> entry : map.entrySet()) {
@@ -69,7 +74,7 @@ public abstract class ClojureMap<K, V> implements Map<K, V> {
     public TransientMap<K, V> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
-        return new TransientMap((ITransientMap) asTransient);
+        return new TransientMap<>((ITransientMap) asTransient);
     }
 
     public <R> ClojureMap<R, V> mapKeys(Function<? super K, ? extends R> f) {
