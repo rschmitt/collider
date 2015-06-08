@@ -60,6 +60,10 @@ public abstract class ClojureList<T> implements List<T> {
         return stream().filter(p).collect(toClojureList());
     }
 
+    public ClojureList<T> exclude(Predicate<? super T> p) {
+        return filter(p.negate());
+    }
+
     public TransientList<T> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
