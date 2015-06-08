@@ -1,13 +1,41 @@
 package com.github.rschmitt.collider;
 
-import clojure.lang.*;
-
-import javax.annotation.concurrent.Immutable;
-import java.util.*;
-import java.util.function.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import javax.annotation.concurrent.Immutable;
+
+import clojure.lang.IEditableCollection;
+import clojure.lang.IPersistentVector;
+import clojure.lang.ITransientCollection;
+import clojure.lang.ITransientVector;
+import clojure.lang.PersistentVector;
+
+/**
+ * A generic persistent immutable List implementation, with three types of methods:
+ * <ol>
+ * <li>Read methods from {@link List}, such as {@link #get}</li>
+ * <li>Write methods from {@link List}, such as {@link #add}; these will throw {@link
+ * UnsupportedOperationException}</li> and have been marked as {@code @Deprecated}
+ * <li>Persistent "modification" methods, such as {@link #append}; these will efficiently create
+ * modified copies of the current list</li>
+ * </ol>
+ */
 @Immutable
 public class ClojureList<T> implements List<T> {
     private final List<T> delegate;
@@ -31,28 +59,49 @@ public class ClojureList<T> implements List<T> {
         return new ClojureList<>(ts);
     }
 
+    /**
+     * Returns a copy of this list with {@code t} appended.
+     */
     public ClojureList<T> append(T t) {
         return ClojureList.create(((IPersistentVector) delegate).cons(t));
     }
 
+    /**
+     * Maps {@code f} over the elements in this list, returning a new list containing the result.
+     */
     public <U> ClojureList<U> map(Function<? super T, ? extends U> f) {
         return stream().map(f).collect(toClojureList());
     }
 
+    /**
+     * Returns a new list containing only the elements in this list matching {@code p}.
+     */
     public ClojureList<T> filter(Predicate<? super T> p) {
         return stream().filter(p).collect(toClojureList());
     }
 
+    /**
+     * Returns a new list containing none of the elements in this list matching {@code p}.
+     */
     public ClojureList<T> exclude(Predicate<? super T> p) {
         return filter(p.negate());
     }
 
+    /**
+     * Returns a transient version of this list in constant time.
+     */
     public TransientList<T> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
         return new TransientList<>((ITransientVector) asTransient);
     }
 
+    /**
+     * Returns a {@link Collector} that accumulates values into a TransientList, returning a
+     * ClojureList upon completion.
+     *
+     * @param <T> the type of the input element in the stream
+     */
     public static <T> Collector<T, TransientList<T>, ClojureList<T>> toClojureList() {
         return new Collector<T, TransientList<T>, ClojureList<T>>() {
             @Override
@@ -120,53 +169,8 @@ public class ClojureList<T> implements List<T> {
     }
 
     @Override
-    public boolean add(T t) {
-        return delegate.add(t);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return delegate.remove(o);
-    }
-
-    @Override
     public boolean containsAll(Collection<?> c) {
         return delegate.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends T> c) {
-        return delegate.addAll(c);
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends T> c) {
-        return delegate.addAll(index, c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return delegate.removeAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return delegate.retainAll(c);
-    }
-
-    @Override
-    public void replaceAll(UnaryOperator<T> operator) {
-        delegate.replaceAll(operator);
-    }
-
-    @Override
-    public void sort(Comparator<? super T> c) {
-        delegate.sort(c);
-    }
-
-    @Override
-    public void clear() {
-        delegate.clear();
     }
 
     @Override
@@ -182,21 +186,6 @@ public class ClojureList<T> implements List<T> {
     @Override
     public T get(int index) {
         return delegate.get(index);
-    }
-
-    @Override
-    public T set(int index, T element) {
-        return delegate.set(index, element);
-    }
-
-    @Override
-    public void add(int index, T element) {
-        delegate.add(index, element);
-    }
-
-    @Override
-    public T remove(int index) {
-        return delegate.remove(index);
     }
 
     @Override
@@ -230,11 +219,6 @@ public class ClojureList<T> implements List<T> {
     }
 
     @Override
-    public boolean removeIf(Predicate<? super T> filter) {
-        return delegate.removeIf(filter);
-    }
-
-    @Override
     public Stream<T> stream() {
         return delegate.stream();
     }
@@ -247,5 +231,122 @@ public class ClojureList<T> implements List<T> {
     @Override
     public void forEach(Consumer<? super T> action) {
         delegate.forEach(action);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #exclude} instead
+     */
+    @Override
+    @Deprecated
+    public boolean removeIf(Predicate<? super T> filter) {
+        return delegate.removeIf(filter);
+    }
+
+    /**
+     * @deprecated this operation will fail
+     */
+    @Override
+    @Deprecated
+    public boolean remove(Object o) {
+        return delegate.remove(o);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #append} instead
+     */
+    @Override
+    @Deprecated
+    public boolean add(T t) {
+        return delegate.add(t);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #append} instead
+     */
+    @Override
+    @Deprecated
+    public boolean addAll(Collection<? extends T> c) {
+        return delegate.addAll(c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #append} instead
+     */
+    @Override
+    @Deprecated
+    public boolean addAll(int index, Collection<? extends T> c) {
+        return delegate.addAll(index, c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #exclude} instead
+     */
+    @Override
+    @Deprecated
+    public boolean removeAll(Collection<?> c) {
+        return delegate.removeAll(c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #filter} instead
+     */
+    @Override
+    @Deprecated
+    public boolean retainAll(Collection<?> c) {
+        return delegate.retainAll(c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #map} instead
+     */
+    @Override
+    @Deprecated
+    public void replaceAll(UnaryOperator<T> operator) {
+        delegate.replaceAll(operator);
+    }
+
+    /**
+     * @deprecated this operation will fail
+     */
+    @Override
+    @Deprecated
+    public void sort(Comparator<? super T> c) {
+        delegate.sort(c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link Collider#clojureList(Object[])} instead
+     */
+    @Override
+    @Deprecated
+    public void clear() {
+        delegate.clear();
+    }
+
+    /**
+     * @deprecated this operation will fail
+     */
+    @Override
+    @Deprecated
+    public T set(int index, T element) {
+        return delegate.set(index, element);
+    }
+
+    /**
+     * @deprecated this operation will fail
+     */
+    @Override
+    @Deprecated
+    public void add(int index, T element) {
+        delegate.add(index, element);
+    }
+
+    /**
+     * @deprecated this operation will fail
+     */
+    @Override
+    @Deprecated
+    public T remove(int index) {
+        return delegate.remove(index);
     }
 }

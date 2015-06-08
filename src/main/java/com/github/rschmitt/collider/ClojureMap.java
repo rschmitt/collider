@@ -1,11 +1,27 @@
 package com.github.rschmitt.collider;
 
-import clojure.lang.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 import javax.annotation.concurrent.Immutable;
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.Collector;
+
+import clojure.lang.Associative;
+import clojure.lang.IEditableCollection;
+import clojure.lang.IPersistentMap;
+import clojure.lang.ITransientCollection;
+import clojure.lang.ITransientMap;
+import clojure.lang.PersistentHashMap;
+import clojure.lang.RT;
 
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 

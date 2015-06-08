@@ -8,7 +8,7 @@ import static com.github.rschmitt.collider.ClojureList.toClojureList;
 import static com.github.rschmitt.collider.Collider.clojureList;
 import static java.util.stream.IntStream.range;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertThrows;
+import static org.testng.Assert.expectThrows;
 
 public class ClojureListTest {
     @Test
@@ -81,16 +81,17 @@ public class ClojureListTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void destructiveUpdatesFail() {
         ClojureList<Integer> list = clojureList(14);
-        assertThrows(list::clear);
-        assertThrows(() -> list.add(15));
-        assertThrows(() -> list.add(15, 15));
-        assertThrows(() -> list.set(1, 15));
-        assertThrows(() -> list.remove(5));
-        assertThrows(() -> list.remove(new Integer(5)));
-        assertThrows(() -> list.removeAll(clojureList(14)));
-        assertThrows(() -> list.replaceAll(x -> x * 2));
-        assertThrows(() -> list.retainAll(clojureList(14)));
+        expectThrows(UnsupportedOperationException.class, list::clear);
+        expectThrows(UnsupportedOperationException.class, () -> list.add(15));
+        expectThrows(UnsupportedOperationException.class, () -> list.add(15, 15));
+        expectThrows(UnsupportedOperationException.class, () -> list.set(1, 15));
+        expectThrows(UnsupportedOperationException.class, () -> list.remove(5));
+        expectThrows(UnsupportedOperationException.class, () -> list.remove(new Integer(5)));
+        expectThrows(UnsupportedOperationException.class, () -> list.removeAll(clojureList(14)));
+        expectThrows(UnsupportedOperationException.class, () -> list.replaceAll(x -> x * 2));
+        expectThrows(UnsupportedOperationException.class, () -> list.retainAll(clojureList(14)));
     }
 }
