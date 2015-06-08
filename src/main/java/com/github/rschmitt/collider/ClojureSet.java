@@ -1,15 +1,39 @@
 package com.github.rschmitt.collider;
 
-import clojure.lang.*;
-
-import javax.annotation.concurrent.Immutable;
-import java.util.*;
-import java.util.function.*;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import javax.annotation.concurrent.Immutable;
+
+import clojure.lang.IEditableCollection;
+import clojure.lang.IPersistentSet;
+import clojure.lang.ITransientCollection;
+import clojure.lang.ITransientSet;
+import clojure.lang.PersistentHashSet;
+
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
+/**
+ * A generic persistent immutable Set implementation, with three types of methods:
+ * <ol>
+ * <li>Read methods from {@link Set}, such as {@link #contains}</li>
+ * <li>Write methods from {@link Set}, such as {@link #add}; these will throw {@link
+ * UnsupportedOperationException}</li> and have been marked as {@code @Deprecated}
+ * <li>Persistent "modification" methods, such as {@link #with}; these will efficiently create
+ * modified copies of the current set</li>
+ * </ol>
+ */
 @Immutable
 public class ClojureSet<T> implements Set<T> {
     private final Set<T> delegate;
@@ -33,32 +57,56 @@ public class ClojureSet<T> implements Set<T> {
         return new ClojureSet<>(ts);
     }
 
+    /**
+     * Returns a copy of this set that includes {@code t}.
+     */
     public ClojureSet<T> with(T t) {
         return ClojureSet.create((IPersistentSet) ((IPersistentSet) delegate).cons(t));
     }
 
+    /**
+     * Returns a copy of this set that does not include {@code t}.
+     */
     public ClojureSet<T> without(T t) {
         return wrap(((IPersistentSet) delegate).disjoin(t));
     }
 
+    /**
+     * Maps {@code f} over the elements in this set, returning a new set containing the result.
+     */
     public <U> ClojureSet<U> map(Function<? super T, ? extends U> f) {
         return stream().map(f).collect(toClojureSet());
     }
 
+    /**
+     * Returns a new set containing only the elements in this set matching {@code p}.
+     */
     public ClojureSet<T> filter(Predicate<? super T> p) {
         return stream().filter(p).collect(toClojureSet());
     }
 
+    /**
+     * Returns a new set containing none of the elements in this set matching {@code p}.
+     */
     public ClojureSet<T> exclude(Predicate<? super T> p) {
         return filter(p.negate());
     }
 
+    /**
+     * Returns a transient version of this set in constant time.
+     */
     public TransientSet<T> asTransient() {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
         return new TransientSet<>((ITransientSet) asTransient);
     }
 
+    /**
+     * Returns a {@link Collector} that accumulates values into a TransientSet, returning a
+     * ClojureSet upon completion.
+     *
+     * @param <T> the type of the input element in the stream
+     */
     public static <T> Collector<T, TransientSet<T>, ClojureSet<T>> toClojureSet() {
         return new Collector<T, TransientSet<T>, ClojureSet<T>>() {
             @Override
@@ -126,38 +174,8 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     @Override
-    public boolean add(T t) {
-        return delegate.add(t);
-    }
-
-    @Override
-    public boolean remove(Object o) {
-        return delegate.remove(o);
-    }
-
-    @Override
     public boolean containsAll(Collection<?> c) {
         return delegate.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends T> c) {
-        return delegate.addAll(c);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return delegate.retainAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return delegate.removeAll(c);
-    }
-
-    @Override
-    public void clear() {
-        delegate.clear();
     }
 
     @Override
@@ -176,11 +194,6 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     @Override
-    public boolean removeIf(Predicate<? super T> filter) {
-        return delegate.removeIf(filter);
-    }
-
-    @Override
     public Stream<T> stream() {
         return delegate.stream();
     }
@@ -193,5 +206,68 @@ public class ClojureSet<T> implements Set<T> {
     @Override
     public void forEach(Consumer<? super T> action) {
         delegate.forEach(action);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #with} instead
+     */
+    @Override
+    @Deprecated
+    public boolean add(T t) {
+        return delegate.add(t);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #without} instead
+     */
+    @Override
+    @Deprecated
+    public boolean remove(Object o) {
+        return delegate.remove(o);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #with} instead
+     */
+    @Override
+    @Deprecated
+    public boolean addAll(Collection<? extends T> c) {
+        return delegate.addAll(c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #filter} instead
+     */
+    @Override
+    @Deprecated
+    public boolean retainAll(Collection<?> c) {
+        return delegate.retainAll(c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #exclude} instead
+     */
+    @Override
+    @Deprecated
+    public boolean removeAll(Collection<?> c) {
+        return delegate.removeAll(c);
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link Collider#clojureSet(Object[])} instead
+     */
+    @Override
+    @Deprecated
+    public void clear() {
+        delegate.clear();
+    }
+
+    /**
+     * @deprecated this operation will fail; use {@link #exclude} instead
+     */
+    @Override
+    @Deprecated
+    public boolean removeIf(Predicate<? super T> filter) {
+        return delegate.removeIf(filter);
     }
 }
