@@ -316,7 +316,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #assoc} instead
+     * @deprecated This operation will fail; use {@link #assoc} instead
      */
     @Override
     @Deprecated
@@ -325,7 +325,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #dissoc} instead
+     * @deprecated This operation will fail; use {@link #dissoc} instead
      */
     @Override
     @Deprecated
@@ -334,7 +334,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #merge(ClojureMap[])} instead
+     * @deprecated This operation will fail; use {@link #merge(ClojureMap[])} instead
      */
     @Override
     @Deprecated
@@ -343,7 +343,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link Collider#clojureMap()} instead
+     * @deprecated This operation will fail; use {@link Collider#clojureMap()} instead
      */
     @Override
     @Deprecated
@@ -352,7 +352,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #mapValues} instead
+     * @deprecated This operation will fail; use {@link #mapValues} instead
      */
     @Override
     @Deprecated
@@ -361,7 +361,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -370,7 +370,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #dissoc} instead
+     * @deprecated This operation will fail; use {@link #dissoc} instead
      */
     @Override
     @Deprecated
@@ -379,7 +379,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #assoc} instead
+     * @deprecated This operation will fail; use {@link #assoc} instead
      */
     @Override
     @Deprecated
@@ -388,7 +388,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #assoc} instead
+     * @deprecated This operation will fail; use {@link #assoc} instead
      */
     @Override
     @Deprecated
@@ -397,7 +397,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -406,7 +406,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -415,7 +415,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -424,7 +424,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated

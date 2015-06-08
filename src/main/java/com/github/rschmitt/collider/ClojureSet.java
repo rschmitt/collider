@@ -209,7 +209,7 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #with} instead
+     * @deprecated This operation will fail; use {@link #with} instead
      */
     @Override
     @Deprecated
@@ -218,7 +218,7 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #without} instead
+     * @deprecated This operation will fail; use {@link #without} instead
      */
     @Override
     @Deprecated
@@ -227,7 +227,7 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #with} instead
+     * @deprecated This operation will fail; use {@link #with} instead
      */
     @Override
     @Deprecated
@@ -236,7 +236,7 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #filter} instead
+     * @deprecated This operation will fail; use {@link #filter} instead
      */
     @Override
     @Deprecated
@@ -245,7 +245,7 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #exclude} instead
+     * @deprecated This operation will fail; use {@link #exclude} instead
      */
     @Override
     @Deprecated
@@ -254,7 +254,7 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link Collider#clojureSet(Object[])} instead
+     * @deprecated This operation will fail; use {@link Collider#clojureSet(Object[])} instead
      */
     @Override
     @Deprecated
@@ -263,7 +263,7 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #exclude} instead
+     * @deprecated This operation will fail; use {@link #exclude} instead
      */
     @Override
     @Deprecated

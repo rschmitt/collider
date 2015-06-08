@@ -234,7 +234,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #exclude} instead
+     * @deprecated This operation will fail; use {@link #exclude} instead
      */
     @Override
     @Deprecated
@@ -243,7 +243,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -252,7 +252,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #append} instead
+     * @deprecated This operation will fail; use {@link #append} instead
      */
     @Override
     @Deprecated
@@ -261,7 +261,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #append} instead
+     * @deprecated This operation will fail; use {@link #append} instead
      */
     @Override
     @Deprecated
@@ -270,7 +270,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #append} instead
+     * @deprecated This operation will fail; use {@link #append} instead
      */
     @Override
     @Deprecated
@@ -279,7 +279,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #exclude} instead
+     * @deprecated This operation will fail; use {@link #exclude} instead
      */
     @Override
     @Deprecated
@@ -288,7 +288,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #filter} instead
+     * @deprecated This operation will fail; use {@link #filter} instead
      */
     @Override
     @Deprecated
@@ -297,7 +297,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link #map} instead
+     * @deprecated This operation will fail; use {@link #map} instead
      */
     @Override
     @Deprecated
@@ -306,7 +306,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -315,7 +315,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail; use {@link Collider#clojureList(Object[])} instead
+     * @deprecated This operation will fail; use {@link Collider#clojureList(Object[])} instead
      */
     @Override
     @Deprecated
@@ -324,7 +324,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -333,7 +333,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
@@ -342,7 +342,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     /**
-     * @deprecated this operation will fail
+     * @deprecated This operation will fail.
      */
     @Override
     @Deprecated
