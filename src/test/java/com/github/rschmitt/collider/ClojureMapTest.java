@@ -5,10 +5,16 @@ import org.testng.annotations.Test;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
-import static com.github.rschmitt.collider.ClojureMap.*;
+import static com.github.rschmitt.collider.ClojureMap.create;
+import static com.github.rschmitt.collider.ClojureMap.toClojureMap;
+import static com.github.rschmitt.collider.ClojureMap.toStrictClojureMap;
 import static com.github.rschmitt.collider.Collider.clojureMap;
 import static java.util.function.Function.identity;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.expectThrows;
 
 public class ClojureMapTest {
     @Test

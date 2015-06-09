@@ -1,10 +1,11 @@
 package com.github.rschmitt.collider;
 
-import clojure.lang.ITransientMap;
-import clojure.lang.PersistentArrayMap;
+import java.util.Map;
 
 import javax.annotation.concurrent.NotThreadSafe;
-import java.util.Map;
+
+import clojure.lang.ITransientMap;
+import clojure.lang.PersistentArrayMap;
 
 @NotThreadSafe
 public class TransientMap<K, V> {

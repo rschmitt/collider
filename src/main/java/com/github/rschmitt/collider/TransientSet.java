@@ -1,12 +1,13 @@
 package com.github.rschmitt.collider;
 
+import java.util.Collection;
+
+import javax.annotation.concurrent.NotThreadSafe;
+
 import clojure.lang.IPersistentCollection;
 import clojure.lang.IPersistentSet;
 import clojure.lang.ITransientSet;
 import clojure.lang.PersistentHashSet;
-
-import javax.annotation.concurrent.NotThreadSafe;
-import java.util.Collection;
 
 @NotThreadSafe
 public class TransientSet<T> {
