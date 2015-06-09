@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -86,6 +87,9 @@ public class ClojureMap<K, V> implements Map<K, V> {
      */
     @SafeVarargs
     public final ClojureMap<K, V> merge(ClojureMap<K, V>... maps) {
+        if (maps.length == 0) return this;
+        if (Stream.of(maps).allMatch(Map::isEmpty)) return this;
+        if (isEmpty() && maps.length == 1) return maps[0];
         TransientMap<K, V> ret = asTransient();
         for (ClojureMap<K, V> map : maps) {
             for (Entry<K, V> entry : map.entrySet()) {

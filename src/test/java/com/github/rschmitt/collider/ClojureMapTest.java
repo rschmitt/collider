@@ -95,6 +95,17 @@ public class ClojureMapTest {
     }
 
     @Test
+    public void mergeOptimizations() throws Exception {
+        ClojureMap<String, Integer> map = clojureMap("a", 1);
+        ClojureMap empty = clojureMap();
+
+        assertSame(map, map.merge());
+        assertSame(map, map.merge(empty));
+        assertSame(map, map.merge(empty, empty));
+        assertSame(map, empty.merge(map));
+    }
+
+    @Test
     @SuppressWarnings("deprecation")
     public void destructiveUpdatesFail() {
         ClojureMap<String, Integer> map = clojureMap("a", 0);
