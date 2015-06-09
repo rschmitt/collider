@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collector;
 
 import clojure.lang.IPersistentMap;
 import clojure.lang.IPersistentSet;
@@ -62,21 +63,32 @@ public class Collider {
         return emptySet.asTransient();
     }
 
+    @SuppressWarnings("unchecked")
     public static <K, V> ClojureMap<K, V> intoClojureMap(Map<? extends K, ? extends V> map) {
         if (map instanceof ClojureMap) return (ClojureMap<K, V>) map;
         if (map instanceof IPersistentMap) return ClojureMap.wrap((IPersistentMap) map);
         return map.entrySet().stream().collect(ClojureMap.toClojureMap(Entry::getKey, Entry::getValue));
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> ClojureList<T> intoClojureList(List<? extends T> list) {
         if (list instanceof ClojureList) return (ClojureList<T>) list;
         if (list instanceof IPersistentVector) return (ClojureList<T>) ClojureList.wrap((IPersistentVector) list);
-        return list.stream().collect(ClojureList.toClojureList());
+
+        // Work around an inference bug in some older JDKs
+        Collector<T, TransientList<T>, ClojureList<T>> collector = ClojureList.toClojureList();
+
+        return list.stream().collect(collector);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> ClojureSet<T> intoClojureSet(Set<? extends T> set) {
         if (set instanceof ClojureSet) return (ClojureSet<T>) set;
         if (set instanceof IPersistentSet) return (ClojureSet<T>) ClojureSet.wrap((IPersistentSet) set);
-        return set.stream().collect(ClojureSet.toClojureSet());
+
+        // Work around an inference bug in some older JDKs
+        Collector<T, TransientSet<T>, ClojureSet<T>> collector = ClojureSet.toClojureSet();
+
+        return set.stream().collect(collector);
     }
 }
