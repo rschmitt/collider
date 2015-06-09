@@ -1,5 +1,6 @@
 package com.github.rschmitt.collider;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -85,6 +86,13 @@ public class ClojureList<T> implements List<T> {
      */
     public ClojureList<T> exclude(Predicate<? super T> p) {
         return filter(p.negate());
+    }
+
+    /**
+     * Returns a mutable copy of this list.
+     */
+    public List<T> toMutableList() {
+        return new ArrayList<>(this);
     }
 
     /**

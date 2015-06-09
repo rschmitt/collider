@@ -3,6 +3,7 @@ package com.github.rschmitt.collider;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -81,8 +82,7 @@ public class ClojureMap<K, V> implements Map<K, V> {
 
     /**
      * Returns a map that consists of all bindings from the current map, as well as {@code maps}.
-     * If
-     * a mapping occurs in more than one map, the mapping in the rightmost map will take
+     * If a mapping occurs in more than one map, the mapping in the rightmost map will take
      * precedence.
      */
     @SafeVarargs
@@ -97,6 +97,13 @@ public class ClojureMap<K, V> implements Map<K, V> {
             }
         }
         return ret.toPersistent();
+    }
+
+    /**
+     * Returns a mutable copy of this map.
+     */
+    public Map<K, V> toMutableMap() {
+        return new HashMap<>(this);
     }
 
     /**

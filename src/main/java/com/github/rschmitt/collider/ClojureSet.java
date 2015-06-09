@@ -2,6 +2,7 @@ package com.github.rschmitt.collider;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
@@ -90,6 +91,13 @@ public class ClojureSet<T> implements Set<T> {
      */
     public ClojureSet<T> exclude(Predicate<? super T> p) {
         return filter(p.negate());
+    }
+
+    /**
+     * Returns a mutable copy of this set.
+     */
+    public Set<T> toMutableSet() {
+        return new HashSet<>(this);
     }
 
     /**
