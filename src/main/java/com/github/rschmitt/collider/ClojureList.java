@@ -30,7 +30,7 @@ import clojure.lang.PersistentVector;
  * A generic persistent immutable List implementation, with three types of methods:
  * <ol>
  * <li>Read methods from {@link List}, such as {@link #get}</li>
- * <li>Write methods from {@link List}, such as {@link #add}; these will throw {@link
+ * <li>Write methods from List, such as {@link #add}; these will throw {@link
  * UnsupportedOperationException}</li> and have been marked as {@code @Deprecated}
  * <li>Persistent "modification" methods, such as {@link #append}; these will efficiently create
  * modified copies of the current list</li>

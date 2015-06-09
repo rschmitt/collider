@@ -28,7 +28,7 @@ import static java.util.stream.Collector.Characteristics.UNORDERED;
  * A generic persistent immutable Set implementation, with three types of methods:
  * <ol>
  * <li>Read methods from {@link Set}, such as {@link #contains}</li>
- * <li>Write methods from {@link Set}, such as {@link #add}; these will throw {@link
+ * <li>Write methods from Set, such as {@link #add}; these will throw {@link
  * UnsupportedOperationException}</li> and have been marked as {@code @Deprecated}
  * <li>Persistent "modification" methods, such as {@link #with}; these will efficiently create
  * modified copies of the current set</li>

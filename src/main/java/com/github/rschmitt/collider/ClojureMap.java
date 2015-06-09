@@ -30,7 +30,7 @@ import static java.util.stream.Collector.Characteristics.UNORDERED;
  * A generic persistent immutable Map implementation, with three types of methods:
  * <ol>
  * <li>Read methods from {@link Map}, such as {@link #get}</li>
- * <li>Write methods from {@link Map}, such as {@link #put}; these will throw {@link
+ * <li>Write methods from Map, such as {@link #put}; these will throw {@link
  * UnsupportedOperationException}</li> and have been marked as {@code @Deprecated}
  * <li>Persistent "modification" methods, such as {@link #assoc}; these will efficiently create
  * modified copies of the current map</li>
