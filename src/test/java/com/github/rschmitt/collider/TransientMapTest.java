@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import static com.github.rschmitt.collider.Collider.clojureMap;
 import static com.github.rschmitt.collider.Collider.transientMap;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.expectThrows;
 
 public class TransientMapTest {
@@ -45,5 +46,16 @@ public class TransientMapTest {
 
         transientMap.remove("a");
         assertEquals(transientMap.size(), 0);
+    }
+
+    @Test
+    public void nullValue() throws Exception {
+        TransientMap transientMap = transientMap();
+
+        transientMap.put("key", null);
+
+        assertEquals(transientMap.size(), 1);
+        assertNull(transientMap.get("key"));
+        assertEquals(transientMap.toPersistent(), clojureMap("key", null));
     }
 }

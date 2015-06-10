@@ -1,7 +1,6 @@
 package com.github.rschmitt.collider;
 
 import java.util.Map;
-import java.util.Optional;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -59,14 +58,7 @@ public class TransientMap<K, V> {
      */
     @SuppressWarnings("unchecked")
     public V get(K key) {
-        return getOptional(key).orElse(null);
-    }
-
-    private Optional<V> getOptional(K key) {
-        Object notFound = new Object();
-        Object ret = delegate.valAt(key, notFound);
-        if (ret == notFound) return Optional.empty();
-        else return Optional.of((V) ret);
+        return (V) delegate.valAt(key);
     }
 
     /**
