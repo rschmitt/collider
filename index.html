@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Collider by rschmitt</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Collider</h1>
+          <h2> Genericized Clojure collections for Java</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/rschmitt" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p><a href="https://travis-ci.org/rschmitt/collider"><img src="http://img.shields.io/travis/rschmitt/collider.svg" alt="Build Status"></a>
+<a href="https://maven-badges.herokuapp.com/maven-central/com.github.rschmitt/collider"><img src="https://img.shields.io/maven-central/v/com.github.rschmitt/collider.svg" alt="Maven Central"></a>
+<a href="https://creativecommons.org/about/cc0"><img src="https://img.shields.io/github/license/rschmitt/collider.svg" alt="License"></a></p>
+
+<h1>
+<a id="collider" class="anchor" href="#collider" aria-hidden="true"><span class="octicon octicon-link"></span></a>Collider</h1>
+
+<p>Collider is a tiny library that provides immutable persistent collections for
+Java. It does this by wrapping Clojure's collections in an object-oriented and
+type-safe facade.</p>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>Collider collections can be created by calling one of the factory methods in
+the <code>Collider</code> class. The resulting collection can be used like any other
+unmodifiable Java collection--for instance, <code>ClojureList&lt;T&gt;</code> implements the
+standard <code>java.util.List&lt;T&gt;</code> interface.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">List&lt;<span class="pl-smi">String</span>&gt;</span> myStrings <span class="pl-k">=</span> clojureList(<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>b<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>c<span class="pl-pds">"</span></span>);
+assertEquals(<span class="pl-c1">3</span>, myStrings<span class="pl-k">.</span>size());
+assertEquals(<span class="pl-s"><span class="pl-pds">"</span>a<span class="pl-pds">"</span></span>, myStrings<span class="pl-k">.</span>get(<span class="pl-c1">0</span>));</pre></div>
+
+<p>Collider collections can also be created by transforming another collection.
+The technique of persistent modification is used to efficiently create modified
+copies while leaving the immutable original untouched.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">ClojureMap&lt;<span class="pl-smi">String</span>, <span class="pl-smi">String</span>&gt;</span> emptyMap <span class="pl-k">=</span> clojureMap();
+
+<span class="pl-k">ClojureMap&lt;<span class="pl-smi">String</span>, <span class="pl-smi">String</span>&gt;</span> assoc <span class="pl-k">=</span> emptyMap<span class="pl-k">.</span>assoc(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>);
+assertTrue(assoc<span class="pl-k">.</span>containsKey(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>));
+assertEquals(assoc<span class="pl-k">.</span>size(), <span class="pl-c1">1</span>);
+assertEquals(assoc<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>), <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>);
+
+<span class="pl-k">ClojureMap&lt;<span class="pl-smi">String</span>, <span class="pl-smi">String</span>&gt;</span> dissoc <span class="pl-k">=</span> assoc<span class="pl-k">.</span>dissoc(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>);
+assertEquals(dissoc, emptyMap);</pre></div>
+
+<p>Since Collider specifically targets Java 8, not only can its collections be
+used with the Stream API, but they also include some convenience methods to
+make common use cases (such as mapping a function over a list) more concise.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">ClojureList&lt;<span class="pl-smi">Integer</span>&gt;</span> evens <span class="pl-k">=</span> clojureList(<span class="pl-c1">0</span>, <span class="pl-c1">2</span>, <span class="pl-c1">4</span>, <span class="pl-c1">6</span>, <span class="pl-c1">8</span>);  <span class="pl-c">// [0, 2, 4, 6, 8]</span>
+<span class="pl-k">ClojureList&lt;<span class="pl-smi">Integer</span>&gt;</span> odds <span class="pl-k">=</span> evens<span class="pl-k">.</span>map(x <span class="pl-k">-</span><span class="pl-k">&gt;</span> x <span class="pl-k">+</span> <span class="pl-c1">1</span>);        <span class="pl-c">// [1, 3, 5, 7, 9]</span></pre></div>
+
+<p>Collider also provides collectors that work with the Stream API.</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">ClojureList&lt;<span class="pl-smi">Integer</span>&gt;</span> singles <span class="pl-k">=</span> <span class="pl-smi">IntStream</span><span class="pl-k">.</span>range(<span class="pl-c1">0</span>, <span class="pl-c1">100</span>)<span class="pl-k">.</span>boxed()<span class="pl-k">.</span>collect(toClojureList());</pre></div>
+
+<p>Internally, these collectors use Clojure's <a href="http://clojure.org/transients">transient
+collections</a> to efficiently accumulate a result.
+Transients are generally used as follows:</p>
+
+<ol>
+<li>Obtain a transient version of a collection from a persistent collection in
+O(1) time</li>
+<li>Mutate the transient collection</li>
+<li>Turn the transient collection into a persistent collection in O(1) time</li>
+</ol>
+
+<p>Collider makes transients available directly. Continuing the above example:</p>
+
+<div class="highlight highlight-java"><pre><span class="pl-k">TransientList&lt;<span class="pl-smi">Integer</span>&gt;</span> tr <span class="pl-k">=</span> singles<span class="pl-k">.</span>asTransient();
+range(<span class="pl-c1">100</span>, <span class="pl-c1">200</span>)<span class="pl-k">.</span>forEach(tr<span class="pl-k">::</span>append);
+<span class="pl-k">ClojureList&lt;<span class="pl-smi">Integer</span>&gt;</span> moreSingles <span class="pl-k">=</span> tr<span class="pl-k">.</span>toPersistent();
+
+assertEquals(moreSingles<span class="pl-k">.</span>size(), <span class="pl-c1">200</span>);
+assertEquals(moreSingles, range(<span class="pl-c1">0</span>, <span class="pl-c1">200</span>)<span class="pl-k">.</span>boxed()<span class="pl-k">.</span>collect(toClojureList()));</pre></div>
+        </section>
+
+        <footer>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
