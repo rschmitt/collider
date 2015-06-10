@@ -40,11 +40,13 @@ public class Collider {
 
     @SafeVarargs
     public static <T> ClojureList<T> clojureList(T... elements) {
+        if (elements == null) return ClojureList.create((T) null);
         return ClojureList.create(elements);
     }
 
     @SafeVarargs
     public static <T> ClojureSet<T> clojureSet(T... elements) {
+        if (elements == null) return ClojureSet.create((T) null);
         return ClojureSet.create(elements);
     }
 

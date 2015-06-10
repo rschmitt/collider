@@ -31,14 +31,14 @@ public class TransientSet<T> {
     }
 
     /**
-     * Idempotently add {@code t} to this set.
+     * Idempotently adds {@code t} to this set.
      */
     public void add(T t) {
         this.delegate = (ITransientSet) delegate.conj(t);
     }
 
     /**
-     * Add all members of {@code collection} to this set.
+     * Adds all members of {@code collection} to this set.
      */
     public void addAll(Collection<? extends T> collection) {
         for (T t : collection) {
@@ -54,10 +54,17 @@ public class TransientSet<T> {
     }
 
     /**
-     * Remove {@code t} from this set.
+     * Removes {@code t} from this set.
      */
     public void remove(T t) {
         this.delegate = delegate.disjoin(t);
+    }
+
+    /**
+     * Returns the number of elements in this set.
+     */
+    public int size() {
+        return delegate.count();
     }
 
     /**

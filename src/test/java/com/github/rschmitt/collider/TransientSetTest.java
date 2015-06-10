@@ -51,4 +51,21 @@ public class TransientSetTest {
         transientSet.addAll(Arrays.asList("d", "e", "f"));
         assertEquals(transientSet.toPersistent(), clojureSet("a", "b", "c", "d", "e", "f"));
     }
+
+    @Test
+    public void nulls() throws Exception {
+        TransientSet transientSet = transientSet();
+        assertEquals(0, transientSet.size());
+
+        transientSet.add(null);
+        assertTrue(transientSet.contains(null));
+        assertEquals(1, transientSet.size());
+
+        transientSet.remove(null);
+        assertFalse(transientSet.contains(null));
+        assertEquals(0, transientSet.size());
+
+        transientSet.add(null);
+        assertEquals(transientSet.toPersistent(), clojureSet(null));
+    }
 }

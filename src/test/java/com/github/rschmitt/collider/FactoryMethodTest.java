@@ -1,8 +1,10 @@
 package com.github.rschmitt.collider;
 
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,5 +70,17 @@ public class FactoryMethodTest {
         assertEquals(intoClojureList(list), list);
         assertEquals(intoClojureSet(set), set);
         assertEquals(intoClojureMap(map), map);
+    }
+
+    @Test
+    public void nulls() throws Exception {
+        Set expectedSet = new HashSet();
+        expectedSet.add(null);
+
+        List expectedList = new ArrayList();
+        expectedList.add(null);
+
+        assertEquals(clojureList(null), expectedList);
+        assertEquals(clojureSet(null), expectedSet);
     }
 }

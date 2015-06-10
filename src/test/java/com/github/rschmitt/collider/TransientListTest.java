@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import static com.github.rschmitt.collider.Collider.clojureList;
 import static com.github.rschmitt.collider.Collider.transientList;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.expectThrows;
 
 public class TransientListTest {
@@ -63,5 +64,23 @@ public class TransientListTest {
 
         transientList.set(2, "b");
         assertEquals(transientList.size(), 3);
+    }
+
+    @Test
+    public void nulls() throws Exception {
+        TransientList transientList = transientList();
+
+        transientList.append(null);
+        assertEquals(transientList.size(), 1);
+
+        transientList.append("a");
+        assertEquals(transientList.size(), 2);
+
+        transientList.set(1, null);
+        assertEquals(transientList.size(), 2);
+        assertNull(transientList.get(0));
+        assertNull(transientList.get(1));
+
+        assertEquals(transientList.toPersistent(), clojureList(null, null));
     }
 }
