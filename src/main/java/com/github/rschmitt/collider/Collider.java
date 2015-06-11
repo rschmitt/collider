@@ -23,6 +23,9 @@ import static java.util.stream.Collector.Characteristics.UNORDERED;
  * imported statically, either individually or with a star import.
  */
 public class Collider {
+    private Collider() {
+    }
+
     public static <K, V> ClojureMap<K, V> clojureMap() {
         return ClojureMap.create();
     }
