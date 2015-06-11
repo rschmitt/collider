@@ -13,5 +13,5 @@ done
 
 for i in ${versions[@]}
 do
-    rm pom-$i.xml
+    rm -f pom-$i.xml pom-$i.xml.bak
 done
