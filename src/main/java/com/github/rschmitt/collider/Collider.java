@@ -19,7 +19,8 @@ import clojure.lang.IPersistentVector;
 import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 /**
- * A collection of factory methods to create immutable collections.
+ * A collection of factory methods to create immutable collections. These methods are designed to be
+ * imported statically, either individually or with a star import.
  */
 public class Collider {
     public static <K, V> ClojureMap<K, V> clojureMap() {
@@ -103,9 +104,9 @@ public class Collider {
     }
 
     /**
-     * Returns a {@link Collector} that accumulates values into a ClojureMap. If multiple mappings
-     * are produced for the same key, the last mapping produced will be the one in the returned
-     * map.
+     * Returns a {@link Collector} that efficiently accumulates values into a ClojureMap. If
+     * multiple mappings are produced for the same key, the last mapping produced will be the one in
+     * the returned map.
      *
      * @param keyMapper   a function from the input type to keys
      * @param valueMapper a function from the input type to values
@@ -149,9 +150,9 @@ public class Collider {
     }
 
     /**
-     * Returns a {@link Collector} that accumulates values into a ClojureMap while detecting
-     * collisions. If multiple mappings are produced for the same key, the {@code mergeFunction}
-     * will be invoked to determine which value to use.
+     * Returns a {@link Collector} that efficiently accumulates values into a ClojureMap while
+     * detecting collisions. If multiple mappings are produced for the same key, the {@code
+     * mergeFunction} will be invoked to determine which value to use.
      *
      * @param keyMapper     a function from the input type to keys
      * @param valueMapper   a function from the input type to values
@@ -208,8 +209,7 @@ public class Collider {
     }
 
     /**
-     * Returns a {@link Collector} that accumulates values into a TransientList, returning a
-     * ClojureList upon completion.
+     * Returns a {@link Collector} that efficiently accumulates values into a TransientList.
      *
      * @param <T> the type of the input element in the stream
      */
@@ -246,8 +246,7 @@ public class Collider {
     }
 
     /**
-     * Returns a {@link Collector} that accumulates values into a TransientSet, returning a
-     * ClojureSet upon completion.
+     * Returns a {@link Collector} that efficiently accumulates values into a ClojureSet.
      *
      * @param <T> the type of the input element in the stream
      */
