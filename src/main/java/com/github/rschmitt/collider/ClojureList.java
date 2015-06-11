@@ -47,7 +47,7 @@ public class ClojureList<T> implements List<T> {
     }
 
     @SafeVarargs
-    public static <T> ClojureList<T> create(T... ts) {
+    static <T> ClojureList<T> create(T... ts) {
         return create(PersistentVector.create(ts));
     }
 
