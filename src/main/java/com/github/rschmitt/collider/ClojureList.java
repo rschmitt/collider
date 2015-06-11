@@ -2,21 +2,15 @@ package com.github.rschmitt.collider;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import javax.annotation.concurrent.Immutable;
@@ -26,6 +20,8 @@ import clojure.lang.IPersistentVector;
 import clojure.lang.ITransientCollection;
 import clojure.lang.ITransientVector;
 import clojure.lang.PersistentVector;
+
+import static com.github.rschmitt.collider.Collider.toClojureList;
 
 /**
  * A generic persistent immutable List implementation, with three types of methods:
@@ -107,44 +103,6 @@ public class ClojureList<T> implements List<T> {
     @Override
     public ClojureList<T> subList(int fromIndex, int toIndex) {
         return wrap((IPersistentVector) delegate.subList(fromIndex, toIndex));
-    }
-
-    /**
-     * Returns a {@link Collector} that accumulates values into a TransientList, returning a
-     * ClojureList upon completion.
-     *
-     * @param <T> the type of the input element in the stream
-     */
-    public static <T> Collector<T, TransientList<T>, ClojureList<T>> toClojureList() {
-        return new Collector<T, TransientList<T>, ClojureList<T>>() {
-            @Override
-            public Supplier<TransientList<T>> supplier() {
-                return TransientList::new;
-            }
-
-            @Override
-            public BiConsumer<TransientList<T>, T> accumulator() {
-                return TransientList::append;
-            }
-
-            @Override
-            public BinaryOperator<TransientList<T>> combiner() {
-                return (a, b) -> {
-                    a.appendAll(b.toPersistent());
-                    return a;
-                };
-            }
-
-            @Override
-            public Function<TransientList<T>, ClojureList<T>> finisher() {
-                return TransientList::toPersistent;
-            }
-
-            @Override
-            public Set<Characteristics> characteristics() {
-                return Collections.emptySet();
-            }
-        };
     }
 
     ////////////////////////////////

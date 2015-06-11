@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import java.util.Set;
 
-import static com.github.rschmitt.collider.ClojureSet.toClojureSet;
+import static com.github.rschmitt.collider.Collider.toClojureSet;
 import static com.github.rschmitt.collider.Collider.clojureSet;
 import static java.util.Collections.emptySet;
 import static java.util.stream.IntStream.range;

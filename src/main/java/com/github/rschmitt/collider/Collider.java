@@ -1,14 +1,22 @@
 package com.github.rschmitt.collider;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import clojure.lang.IPersistentMap;
 import clojure.lang.IPersistentSet;
 import clojure.lang.IPersistentVector;
+
+import static java.util.stream.Collector.Characteristics.UNORDERED;
 
 /**
  * A collection of factory methods to create immutable collections.
@@ -69,7 +77,7 @@ public class Collider {
     public static <K, V> ClojureMap<K, V> intoClojureMap(Map<? extends K, ? extends V> map) {
         if (map instanceof ClojureMap) return (ClojureMap<K, V>) map;
         if (map instanceof IPersistentMap) return ClojureMap.wrap((IPersistentMap) map);
-        return map.entrySet().stream().collect(ClojureMap.toClojureMap(Entry::getKey, Entry::getValue));
+        return map.entrySet().stream().collect(toClojureMap(Entry::getKey, Entry::getValue));
     }
 
     @SuppressWarnings("unchecked")
@@ -78,7 +86,7 @@ public class Collider {
         if (list instanceof IPersistentVector) return (ClojureList<T>) ClojureList.wrap((IPersistentVector) list);
 
         // Work around an inference bug in some older JDKs
-        Collector<T, TransientList<T>, ClojureList<T>> collector = ClojureList.toClojureList();
+        Collector<T, TransientList<T>, ClojureList<T>> collector = toClojureList();
 
         return list.stream().collect(collector);
     }
@@ -89,8 +97,189 @@ public class Collider {
         if (set instanceof IPersistentSet) return (ClojureSet<T>) ClojureSet.wrap((IPersistentSet) set);
 
         // Work around an inference bug in some older JDKs
-        Collector<T, TransientSet<T>, ClojureSet<T>> collector = ClojureSet.toClojureSet();
+        Collector<T, TransientSet<T>, ClojureSet<T>> collector = toClojureSet();
 
         return set.stream().collect(collector);
+    }
+
+    /**
+     * Returns a {@link Collector} that accumulates values into a ClojureMap. If multiple mappings
+     * are produced for the same key, the last mapping produced will be the one in the returned
+     * map.
+     *
+     * @param keyMapper   a function from the input type to keys
+     * @param valueMapper a function from the input type to values
+     * @param <T>         the type of the input element in the stream
+     * @param <K>         the key type for the map that will be returned
+     * @param <V>         the value type for the map that will be returned
+     */
+    public static <T, K, V> Collector<T, TransientMap<K, V>, ClojureMap<K, V>> toClojureMap(
+            Function<? super T, ? extends K> keyMapper,
+            Function<? super T, ? extends V> valueMapper
+    ) {
+        return new Collector<T, TransientMap<K, V>, ClojureMap<K, V>>() {
+            @Override
+            public Supplier<TransientMap<K, V>> supplier() {
+                return TransientMap::new;
+            }
+
+            @Override
+            public BiConsumer<TransientMap<K, V>, T> accumulator() {
+                return (map, t) -> map.put(keyMapper.apply(t), valueMapper.apply(t));
+            }
+
+            @Override
+            public BinaryOperator<TransientMap<K, V>> combiner() {
+                return (x, y) -> {
+                    x.putAll(y.toPersistent());
+                    return x;
+                };
+            }
+
+            @Override
+            public Function<TransientMap<K, V>, ClojureMap<K, V>> finisher() {
+                return TransientMap::toPersistent;
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return EnumSet.of(UNORDERED);
+            }
+        };
+    }
+
+    /**
+     * Returns a {@link Collector} that accumulates values into a ClojureMap while detecting
+     * collisions. If multiple mappings are produced for the same key, the {@code mergeFunction}
+     * will be invoked to determine which value to use.
+     *
+     * @param keyMapper     a function from the input type to keys
+     * @param valueMapper   a function from the input type to values
+     * @param mergeFunction a function used to resolve collisions between values associated with the
+     *                      same key
+     * @param <T>           the type of the input element in the stream
+     * @param <K>           the key type for the map that will be returned
+     * @param <V>           the value type for the map that will be returned
+     */
+    public static <T, K, V> Collector<T, TransientMap<K, V>, ClojureMap<K, V>> toStrictClojureMap(
+            Function<? super T, ? extends K> keyMapper,
+            Function<? super T, ? extends V> valueMapper,
+            BinaryOperator<V> mergeFunction
+    ) {
+        return new Collector<T, TransientMap<K, V>, ClojureMap<K, V>>() {
+            @Override
+            public Supplier<TransientMap<K, V>> supplier() {
+                return TransientMap::new;
+            }
+
+            @Override
+            public BiConsumer<TransientMap<K, V>, T> accumulator() {
+                return (map, t) -> putUnique(map, keyMapper.apply(t), valueMapper.apply(t));
+            }
+
+            @Override
+            public BinaryOperator<TransientMap<K, V>> combiner() {
+                return (x, y) -> {
+                    ClojureMap<K, V> source = y.toPersistent();
+                    for (Entry<K, V> entry : source.entrySet()) {
+                        putUnique(x, entry.getKey(), entry.getValue());
+                    }
+                    return x;
+                };
+            }
+
+            private void putUnique(TransientMap<K, V> map, K key, V value) {
+                if (map.contains(key)) {
+                    value = mergeFunction.apply(value, map.get(key));
+                }
+                map.put(key, value);
+            }
+
+            @Override
+            public Function<TransientMap<K, V>, ClojureMap<K, V>> finisher() {
+                return TransientMap::toPersistent;
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return Collections.emptySet();
+            }
+        };
+    }
+
+    /**
+     * Returns a {@link Collector} that accumulates values into a TransientList, returning a
+     * ClojureList upon completion.
+     *
+     * @param <T> the type of the input element in the stream
+     */
+    public static <T> Collector<T, TransientList<T>, ClojureList<T>> toClojureList() {
+        return new Collector<T, TransientList<T>, ClojureList<T>>() {
+            @Override
+            public Supplier<TransientList<T>> supplier() {
+                return TransientList::new;
+            }
+
+            @Override
+            public BiConsumer<TransientList<T>, T> accumulator() {
+                return TransientList::append;
+            }
+
+            @Override
+            public BinaryOperator<TransientList<T>> combiner() {
+                return (a, b) -> {
+                    a.appendAll(b.toPersistent());
+                    return a;
+                };
+            }
+
+            @Override
+            public Function<TransientList<T>, ClojureList<T>> finisher() {
+                return TransientList::toPersistent;
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return Collections.emptySet();
+            }
+        };
+    }
+
+    /**
+     * Returns a {@link Collector} that accumulates values into a TransientSet, returning a
+     * ClojureSet upon completion.
+     *
+     * @param <T> the type of the input element in the stream
+     */
+    public static <T> Collector<T, TransientSet<T>, ClojureSet<T>> toClojureSet() {
+        return new Collector<T, TransientSet<T>, ClojureSet<T>>() {
+            @Override
+            public Supplier<TransientSet<T>> supplier() {
+                return TransientSet::new;
+            }
+
+            @Override
+            public BiConsumer<TransientSet<T>, T> accumulator() {
+                return TransientSet::add;
+            }
+
+            @Override
+            public BinaryOperator<TransientSet<T>> combiner() {
+                return (a, b) -> {
+                    a.addAll(b.toPersistent());
+                    return a;
+                };
+            }
+
+            @Override
+            public Function<TransientSet<T>, ClojureSet<T>> finisher() {
+                return TransientSet::toPersistent;
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return EnumSet.of(UNORDERED);
+            }
+        };
     }
 }

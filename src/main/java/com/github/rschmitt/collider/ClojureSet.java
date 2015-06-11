@@ -1,18 +1,13 @@
 package com.github.rschmitt.collider;
 
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import javax.annotation.concurrent.Immutable;
@@ -23,7 +18,7 @@ import clojure.lang.ITransientCollection;
 import clojure.lang.ITransientSet;
 import clojure.lang.PersistentHashSet;
 
-import static java.util.stream.Collector.Characteristics.UNORDERED;
+import static com.github.rschmitt.collider.Collider.toClojureSet;
 
 /**
  * A generic persistent immutable Set implementation, with three types of methods:
@@ -107,44 +102,6 @@ public class ClojureSet<T> implements Set<T> {
         IEditableCollection asEditable = (IEditableCollection) delegate;
         ITransientCollection asTransient = asEditable.asTransient();
         return new TransientSet<>((ITransientSet) asTransient);
-    }
-
-    /**
-     * Returns a {@link Collector} that accumulates values into a TransientSet, returning a
-     * ClojureSet upon completion.
-     *
-     * @param <T> the type of the input element in the stream
-     */
-    public static <T> Collector<T, TransientSet<T>, ClojureSet<T>> toClojureSet() {
-        return new Collector<T, TransientSet<T>, ClojureSet<T>>() {
-            @Override
-            public Supplier<TransientSet<T>> supplier() {
-                return TransientSet::new;
-            }
-
-            @Override
-            public BiConsumer<TransientSet<T>, T> accumulator() {
-                return TransientSet::add;
-            }
-
-            @Override
-            public BinaryOperator<TransientSet<T>> combiner() {
-                return (a, b) -> {
-                    a.addAll(b.toPersistent());
-                    return a;
-                };
-            }
-
-            @Override
-            public Function<TransientSet<T>, ClojureSet<T>> finisher() {
-                return TransientSet::toPersistent;
-            }
-
-            @Override
-            public Set<Characteristics> characteristics() {
-                return EnumSet.of(UNORDERED);
-            }
-        };
     }
 
     ////////////////////////////////

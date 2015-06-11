@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static com.github.rschmitt.collider.ClojureList.toClojureList;
+import static com.github.rschmitt.collider.Collider.toClojureList;
 import static com.github.rschmitt.collider.Collider.clojureList;
 import static java.util.stream.IntStream.range;
 import static org.testng.Assert.assertEquals;

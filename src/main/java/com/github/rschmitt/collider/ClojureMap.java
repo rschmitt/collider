@@ -1,18 +1,13 @@
 package com.github.rschmitt.collider;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import javax.annotation.concurrent.Immutable;
@@ -25,7 +20,7 @@ import clojure.lang.ITransientMap;
 import clojure.lang.PersistentHashMap;
 import clojure.lang.RT;
 
-import static java.util.stream.Collector.Characteristics.UNORDERED;
+import static com.github.rschmitt.collider.Collider.toClojureMap;
 
 /**
  * A generic persistent immutable Map implementation, with three types of methods:
@@ -156,112 +151,6 @@ public class ClojureMap<K, V> implements Map<K, V> {
      */
     public ClojureMap<K, V> excludeValues(Predicate<? super V> p) {
         return filterValues(p.negate());
-    }
-
-    /**
-     * Returns a {@link Collector} that accumulates values into a TransientMap, returning a
-     * ClojureMap upon completion. If multiple mappings are produced for the same key, the last
-     * mapping produced will be the one in the returned map.
-     *
-     * @param keyMapper   a function from the input type to keys
-     * @param valueMapper a function from the input type to values
-     * @param <T>         the type of the input element in the stream
-     * @param <K>         the key type for the map that will be returned
-     * @param <V>         the value type for the map that will be returned
-     */
-    public static <T, K, V> Collector<T, TransientMap<K, V>, ClojureMap<K, V>> toClojureMap(
-            Function<? super T, ? extends K> keyMapper,
-            Function<? super T, ? extends V> valueMapper
-    ) {
-        return new Collector<T, TransientMap<K, V>, ClojureMap<K, V>>() {
-            @Override
-            public Supplier<TransientMap<K, V>> supplier() {
-                return TransientMap::new;
-            }
-
-            @Override
-            public BiConsumer<TransientMap<K, V>, T> accumulator() {
-                return (map, t) -> map.put(keyMapper.apply(t), valueMapper.apply(t));
-            }
-
-            @Override
-            public BinaryOperator<TransientMap<K, V>> combiner() {
-                return (x, y) -> {
-                    x.putAll(y.toPersistent());
-                    return x;
-                };
-            }
-
-            @Override
-            public Function<TransientMap<K, V>, ClojureMap<K, V>> finisher() {
-                return TransientMap::toPersistent;
-            }
-
-            @Override
-            public Set<Characteristics> characteristics() {
-                return EnumSet.of(UNORDERED);
-            }
-        };
-    }
-
-    /**
-     * Returns a {@link Collector} that accumulates values into a TransientMap, returning a
-     * ClojureMap upon completion. If multiple mappings are produced for the same key, the {@code
-     * mergeFunction} will be invoked to determine a value.
-     *
-     * @param keyMapper     a function from the input type to keys
-     * @param valueMapper   a function from the input type to values
-     * @param mergeFunction a function used to resolve collisions between values associated with
-     *                      the
-     *                      same key
-     * @param <T>           the type of the input element in the stream
-     * @param <K>           the key type for the map that will be returned
-     * @param <V>           the value type for the map that will be returned
-     */
-    public static <T, K, V> Collector<T, TransientMap<K, V>, ClojureMap<K, V>> toStrictClojureMap(
-            Function<? super T, ? extends K> keyMapper,
-            Function<? super T, ? extends V> valueMapper,
-            BinaryOperator<V> mergeFunction
-    ) {
-        return new Collector<T, TransientMap<K, V>, ClojureMap<K, V>>() {
-            @Override
-            public Supplier<TransientMap<K, V>> supplier() {
-                return TransientMap::new;
-            }
-
-            @Override
-            public BiConsumer<TransientMap<K, V>, T> accumulator() {
-                return (map, t) -> putUnique(map, keyMapper.apply(t), valueMapper.apply(t));
-            }
-
-            @Override
-            public BinaryOperator<TransientMap<K, V>> combiner() {
-                return (x, y) -> {
-                    ClojureMap<K, V> source = y.toPersistent();
-                    for (Entry<K, V> entry : source.entrySet()) {
-                        putUnique(x, entry.getKey(), entry.getValue());
-                    }
-                    return x;
-                };
-            }
-
-            private void putUnique(TransientMap<K, V> map, K key, V value) {
-                if (map.contains(key)) {
-                    value = mergeFunction.apply(value, map.get(key));
-                }
-                map.put(key, value);
-            }
-
-            @Override
-            public Function<TransientMap<K, V>, ClojureMap<K, V>> finisher() {
-                return TransientMap::toPersistent;
-            }
-
-            @Override
-            public Set<Characteristics> characteristics() {
-                return Collections.emptySet();
-            }
-        };
     }
 
     ////////////////////////////////

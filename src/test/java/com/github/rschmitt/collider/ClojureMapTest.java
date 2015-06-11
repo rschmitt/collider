@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import static com.github.rschmitt.collider.ClojureMap.create;
-import static com.github.rschmitt.collider.ClojureMap.toClojureMap;
-import static com.github.rschmitt.collider.ClojureMap.toStrictClojureMap;
+import static com.github.rschmitt.collider.Collider.toClojureMap;
+import static com.github.rschmitt.collider.Collider.toStrictClojureMap;
 import static com.github.rschmitt.collider.Collider.clojureMap;
 import static java.util.function.Function.identity;
 import static org.testng.Assert.assertEquals;
