@@ -116,7 +116,8 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     /**
-     * Maps {@code f} over the keys in this map, returning a new map containing the result.
+     * Maps {@code f} over the keys in this map, returning a new map containing the result. If
+     * {@code f} produces collisions, the result is undefined.
      */
     public <R> ClojureMap<R, V> mapKeys(Function<? super K, ? extends R> f) {
         return entrySet().stream().collect(toClojureMap(e -> f.apply(e.getKey()), Entry::getValue));
@@ -205,7 +206,8 @@ public class ClojureMap<K, V> implements Map<K, V> {
 
     /**
      * Returns a {@link Collector} that accumulates values into a TransientMap, returning a
-     * ClojureMap upon completion.
+     * ClojureMap upon completion. If multiple mappings are produced for the same key, the {@code
+     * mergeFunction} will be invoked to determine a value.
      *
      * @param keyMapper     a function from the input type to keys
      * @param valueMapper   a function from the input type to values
