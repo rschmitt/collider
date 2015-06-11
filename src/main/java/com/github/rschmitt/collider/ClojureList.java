@@ -104,6 +104,11 @@ public class ClojureList<T> implements List<T> {
         return new TransientList<>((ITransientVector) asTransient);
     }
 
+    @Override
+    public ClojureList<T> subList(int fromIndex, int toIndex) {
+        return wrap((IPersistentVector) delegate.subList(fromIndex, toIndex));
+    }
+
     /**
      * Returns a {@link Collector} that accumulates values into a TransientList, returning a
      * ClojureList upon completion.
@@ -214,11 +219,6 @@ public class ClojureList<T> implements List<T> {
     @Override
     public ListIterator<T> listIterator(int index) {
         return delegate.listIterator(index);
-    }
-
-    @Override
-    public List<T> subList(int fromIndex, int toIndex) {
-        return delegate.subList(fromIndex, toIndex);
     }
 
     @Override

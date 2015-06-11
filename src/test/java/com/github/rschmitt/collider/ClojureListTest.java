@@ -81,6 +81,16 @@ public class ClojureListTest {
     }
 
     @Test
+    public void sublist() throws Exception {
+        ClojureList<Integer> singles = range(0, 100).boxed().collect(toClojureList());
+        ClojureList<Integer> sublist = singles.subList(0, 50);
+        for (int i = 50; i < 100; i++) {
+            sublist = sublist.append(i);
+        }
+        assertEquals(sublist, singles);
+    }
+
+    @Test
     @SuppressWarnings("deprecation")
     public void destructiveUpdatesFail() {
         ClojureList<Integer> list = clojureList(14);
