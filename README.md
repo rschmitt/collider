@@ -6,7 +6,7 @@
 
 Collider is a tiny library that provides immutable persistent collections for
 Java. It does this by wrapping Clojure's collections in an object-oriented and
-type-safe facade.
+type-safe facade. Browse the Javadoc [online](http://rschmitt.github.io/collider/javadoc/).
 
 ## Examples
 
