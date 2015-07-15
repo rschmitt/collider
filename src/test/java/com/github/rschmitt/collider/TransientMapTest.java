@@ -6,7 +6,7 @@ import static com.github.rschmitt.collider.Collider.clojureMap;
 import static com.github.rschmitt.collider.Collider.transientMap;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
-import static org.testng.Assert.expectThrows;
+import static org.testng.Assert.assertThrows;
 
 public class TransientMapTest {
     @Test
@@ -14,7 +14,7 @@ public class TransientMapTest {
     public void reuseFails() throws Exception {
         TransientMap transientMap = transientMap();
         transientMap.toPersistent();
-        expectThrows(IllegalAccessError.class, () -> transientMap.put(new Object(), new Object()));
+        assertThrows(IllegalAccessError.class, () -> transientMap.put(new Object(), new Object()));
     }
 
     @Test

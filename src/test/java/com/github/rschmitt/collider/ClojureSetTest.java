@@ -10,7 +10,7 @@ import static java.util.Collections.emptySet;
 import static java.util.stream.IntStream.range;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.expectThrows;
+import static org.testng.Assert.assertThrows;
 
 public class ClojureSetTest {
     @Test
@@ -99,11 +99,11 @@ public class ClojureSetTest {
     @SuppressWarnings("deprecation")
     public void destructiveUpdatesFail() {
         ClojureSet<Integer> set = clojureSet(14);
-        expectThrows(UnsupportedOperationException.class, set::clear);
-        expectThrows(UnsupportedOperationException.class, () -> set.add(15));
-        expectThrows(UnsupportedOperationException.class, () -> set.remove(5));
-        expectThrows(UnsupportedOperationException.class, () -> set.remove(new Integer(5)));
-        expectThrows(UnsupportedOperationException.class, () -> set.removeAll(clojureSet(4)));
-        expectThrows(UnsupportedOperationException.class, () -> set.retainAll(clojureSet()));
+        assertThrows(UnsupportedOperationException.class, set::clear);
+        assertThrows(UnsupportedOperationException.class, () -> set.add(15));
+        assertThrows(UnsupportedOperationException.class, () -> set.remove(5));
+        assertThrows(UnsupportedOperationException.class, () -> set.remove(new Integer(5)));
+        assertThrows(UnsupportedOperationException.class, () -> set.removeAll(clojureSet(4)));
+        assertThrows(UnsupportedOperationException.class, () -> set.retainAll(clojureSet()));
     }
 }

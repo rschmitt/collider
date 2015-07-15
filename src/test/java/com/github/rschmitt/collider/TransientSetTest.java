@@ -9,7 +9,7 @@ import static com.github.rschmitt.collider.Collider.transientSet;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.expectThrows;
+import static org.testng.Assert.assertThrows;
 
 public class TransientSetTest {
     @Test
@@ -17,7 +17,7 @@ public class TransientSetTest {
     public void reuseFails() throws Exception {
         TransientSet transientSet = transientSet();
         transientSet.toPersistent();
-        expectThrows(IllegalAccessError.class, () -> transientSet.add(new Object()));
+        assertThrows(IllegalAccessError.class, () -> transientSet.add(new Object()));
     }
 
     @Test

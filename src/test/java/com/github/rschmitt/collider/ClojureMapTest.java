@@ -14,7 +14,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.expectThrows;
+import static org.testng.Assert.assertThrows;
 
 public class ClojureMapTest {
     @Test
@@ -115,20 +115,20 @@ public class ClojureMapTest {
     @SuppressWarnings("deprecation")
     public void destructiveUpdatesFail() {
         ClojureMap<String, Integer> map = clojureMap("a", 0);
-        expectThrows(UnsupportedOperationException.class, map::clear);
-        expectThrows(UnsupportedOperationException.class, () -> map.put("b", 15));
-        expectThrows(UnsupportedOperationException.class, () -> map.putAll(clojureMap()));
-        expectThrows(UnsupportedOperationException.class, () -> map.remove("a"));
-        expectThrows(UnsupportedOperationException.class, () -> map.remove("a", 0));
-        expectThrows(UnsupportedOperationException.class, () -> map.replace("a", 0));
-        expectThrows(UnsupportedOperationException.class, () -> map.replace("a", 0, 2));
-        expectThrows(UnsupportedOperationException.class, () -> map.putIfAbsent("b", 4));
-        expectThrows(UnsupportedOperationException.class, () -> map.compute("a", String::codePointAt));
-        expectThrows(UnsupportedOperationException.class, () -> map.computeIfAbsent("b", String::length));
-        expectThrows(UnsupportedOperationException.class, () -> map.computeIfPresent("a", String::codePointAt));
-        expectThrows(UnsupportedOperationException.class, () -> map.merge("a", 4, (x, y) -> x + y));
-        expectThrows(UnsupportedOperationException.class, () -> map.compute("a", String::codePointAt));
-        expectThrows(UnsupportedOperationException.class, () -> map.computeIfAbsent("b", String::length));
-        expectThrows(UnsupportedOperationException.class, () -> map.computeIfPresent("a", String::codePointAt));
+        assertThrows(UnsupportedOperationException.class, map::clear);
+        assertThrows(UnsupportedOperationException.class, () -> map.put("b", 15));
+        assertThrows(UnsupportedOperationException.class, () -> map.putAll(clojureMap()));
+        assertThrows(UnsupportedOperationException.class, () -> map.remove("a"));
+        assertThrows(UnsupportedOperationException.class, () -> map.remove("a", 0));
+        assertThrows(UnsupportedOperationException.class, () -> map.replace("a", 0));
+        assertThrows(UnsupportedOperationException.class, () -> map.replace("a", 0, 2));
+        assertThrows(UnsupportedOperationException.class, () -> map.putIfAbsent("b", 4));
+        assertThrows(UnsupportedOperationException.class, () -> map.compute("a", String::codePointAt));
+        assertThrows(UnsupportedOperationException.class, () -> map.computeIfAbsent("b", String::length));
+        assertThrows(UnsupportedOperationException.class, () -> map.computeIfPresent("a", String::codePointAt));
+        assertThrows(UnsupportedOperationException.class, () -> map.merge("a", 4, (x, y) -> x + y));
+        assertThrows(UnsupportedOperationException.class, () -> map.compute("a", String::codePointAt));
+        assertThrows(UnsupportedOperationException.class, () -> map.computeIfAbsent("b", String::length));
+        assertThrows(UnsupportedOperationException.class, () -> map.computeIfPresent("a", String::codePointAt));
     }
 }
