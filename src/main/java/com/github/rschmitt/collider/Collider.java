@@ -50,6 +50,26 @@ public class Collider {
         return ClojureMap.create(key1, val1, key2, val2, key3, val3, key4, val4, key5, val5);
     }
 
+    public static <K, V> ClojureMap<K, V> clojureMap(K key1, V val1, K key2, V val2, K key3, V val3, K key4, V val4, K key5, V val5, K key6, V val6) {
+        return ClojureMap.create(key1, val1, key2, val2, key3, val3, key4, val4, key5, val5, key6, val6);
+    }
+
+    public static <K, V> ClojureMap<K, V> clojureMap(K key1, V val1, K key2, V val2, K key3, V val3, K key4, V val4, K key5, V val5, K key6, V val6, K key7, V val7) {
+        return ClojureMap.create(key1, val1, key2, val2, key3, val3, key4, val4, key5, val5, key6, val6, key7, val7);
+    }
+
+    public static <K, V> ClojureMap<K, V> clojureMap(K key1, V val1, K key2, V val2, K key3, V val3, K key4, V val4, K key5, V val5, K key6, V val6, K key7, V val7, K key8, V val8) {
+        return ClojureMap.create(key1, val1, key2, val2, key3, val3, key4, val4, key5, val5, key6, val6, key7, val7, key8, val8);
+    }
+
+    public static <K, V> ClojureMap<K, V> clojureMap(K key1, V val1, K key2, V val2, K key3, V val3, K key4, V val4, K key5, V val5, K key6, V val6, K key7, V val7, K key8, V val8, K key9, V val9) {
+        return ClojureMap.create(key1, val1, key2, val2, key3, val3, key4, val4, key5, val5, key6, val6, key7, val7, key8, val8, key9, val9);
+    }
+
+    public static <K, V> ClojureMap<K, V> clojureMap(K key1, V val1, K key2, V val2, K key3, V val3, K key4, V val4, K key5, V val5, K key6, V val6, K key7, V val7, K key8, V val8, K key9, V val9, K key10, V val10) {
+        return ClojureMap.create(key1, val1, key2, val2, key3, val3, key4, val4, key5, val5, key6, val6, key7, val7, key8, val8, key9, val9, key10, val10);
+    }
+
     @SafeVarargs
     public static <T> ClojureList<T> clojureList(T... elements) {
         if (elements == null) return ClojureList.create((T) null);
