@@ -155,6 +155,11 @@ public class ClojureList<T> implements List<T> {
     }
 
     @Override
+    public String toString() {
+        return delegate.toString();
+    }
+
+    @Override
     public T get(int index) {
         return delegate.get(index);
     }

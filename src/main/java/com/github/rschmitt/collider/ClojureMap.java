@@ -208,6 +208,11 @@ public class ClojureMap<K, V> implements Map<K, V> {
     }
 
     @Override
+    public String toString() {
+        return delegate.toString();
+    }
+
+    @Override
     public V getOrDefault(Object key, V defaultValue) {
         return delegate.getOrDefault(key, defaultValue);
     }

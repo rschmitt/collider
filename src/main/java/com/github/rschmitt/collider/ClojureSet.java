@@ -154,6 +154,11 @@ public class ClojureSet<T> implements Set<T> {
     }
 
     @Override
+    public String toString() {
+        return delegate.toString();
+    }
+
+    @Override
     public Spliterator<T> spliterator() {
         return delegate.spliterator();
     }
