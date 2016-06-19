@@ -56,6 +56,10 @@ public class ClojureMap<K, V> implements Map<K, V> {
         this.delegate = (Map<K, V>) delegate;
     }
 
+    public Map<K, V> unwrap() {
+        return (Map) delegate;
+    }
+
     /**
      * Returns a copy of this map which also contains a mapping from {@code key} to {@code value}.
      * If a mapping for {@code key} already exists in the current map, it will be overwritten.

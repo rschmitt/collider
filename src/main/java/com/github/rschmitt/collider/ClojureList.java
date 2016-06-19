@@ -56,6 +56,10 @@ public class ClojureList<T> implements List<T> {
         return new ClojureList<>(ts);
     }
 
+    public List<T> unwrap() {
+        return (List) delegate;
+    }
+
     /**
      * Returns a copy of this list with {@code t} appended.
      */

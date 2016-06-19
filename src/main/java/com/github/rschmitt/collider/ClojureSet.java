@@ -53,6 +53,10 @@ public class ClojureSet<T> implements Set<T> {
         return new ClojureSet<>(ts);
     }
 
+    public Set<T> unwrap() {
+        return (Set) delegate;
+    }
+
     /**
      * Returns a copy of this set that includes {@code t}.
      */
