@@ -1,16 +1,16 @@
 package com.github.rschmitt.collider;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static com.github.rschmitt.collider.Collider.toClojureSet;
 import static com.github.rschmitt.collider.Collider.clojureSet;
+import static com.github.rschmitt.collider.Collider.toClojureSet;
 import static java.util.Collections.emptySet;
 import static java.util.stream.IntStream.range;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClojureSetTest {
     @Test

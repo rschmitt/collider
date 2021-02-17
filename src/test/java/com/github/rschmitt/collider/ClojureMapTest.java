@@ -1,20 +1,20 @@
 package com.github.rschmitt.collider;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import static com.github.rschmitt.collider.ClojureMap.create;
+import static com.github.rschmitt.collider.Collider.clojureMap;
 import static com.github.rschmitt.collider.Collider.toClojureMap;
 import static com.github.rschmitt.collider.Collider.toStrictClojureMap;
-import static com.github.rschmitt.collider.Collider.clojureMap;
 import static java.util.function.Function.identity;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertSame;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClojureMapTest {
     @Test

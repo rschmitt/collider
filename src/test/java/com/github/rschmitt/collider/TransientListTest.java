@@ -1,12 +1,13 @@
 package com.github.rschmitt.collider;
 
-import org.testng.annotations.Test;
+
+import org.junit.jupiter.api.Test;
 
 import static com.github.rschmitt.collider.Collider.clojureList;
 import static com.github.rschmitt.collider.Collider.transientList;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TransientListTest {
     @Test

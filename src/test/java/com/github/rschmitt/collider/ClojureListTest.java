@@ -1,14 +1,14 @@
 package com.github.rschmitt.collider;
 
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.github.rschmitt.collider.Collider.toClojureList;
 import static com.github.rschmitt.collider.Collider.clojureList;
+import static com.github.rschmitt.collider.Collider.toClojureList;
 import static java.util.stream.IntStream.range;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ClojureListTest {
     @Test
